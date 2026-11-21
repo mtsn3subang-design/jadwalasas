@@ -7,482 +7,110 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600&display=swap">
   <style>
     :root {
-      --bg: #f6f2e6;
-      --card: #fffdf6;
-      --ink: #0d2b21;
-      --mut: #5d6f66;
-      --line: #e3d9b8;
-      --em: #0b5d3f;
-      --gold: #b98a24;
-      --gl: #f0d98a;
-      --tok: #eaf3ec;
-      --ticker-bg: #072b1e;
-      --ticker-border: rgba(240, 217, 138, 0.35);
+      --bg: #f6f2e6; --card: #fffdf6; --ink: #0d2b21; --mut: #5d6f66; --line: #e3d9b8;
+      --em: #0b5d3f; --gold: #b98a24; --gl: #f0d98a; --tok: #eaf3ec;
+      --ticker-bg: #072b1e; --ticker-border: rgba(240, 217, 138, 0.35);
       box-sizing: border-box;
       padding-top: env(safe-area-inset-top, 0px);
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
-
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --bg: #04170f;
-        --card: #0a2a1e;
-        --ink: #f1ead2;
-        --mut: #9db3a7;
-        --line: #1c4a37;
-        --tok: #06180f;
-        --ticker-bg: #052116;
+        --bg: #04170f; --card: #0a2a1e; --ink: #f1ead2; --mut: #9db3a7; --line: #1c4a37; --tok: #06180f; --ticker-bg: #052116;
       }
     }
-
     :root[data-theme="dark"] {
-      --bg: #04170f;
-      --card: #0a2a1e;
-      --ink: #f1ead2;
-      --mut: #9db3a7;
-      --line: #1c4a37;
-      --tok: #06180f;
-      --ticker-bg: #052116;
+      --bg: #04170f; --card: #0a2a1e; --ink: #f1ead2; --mut: #9db3a7; --line: #1c4a37; --tok: #06180f; --ticker-bg: #052116;
     }
-
     html { scroll-padding-top: env(safe-area-inset-top, 0px); }
     *, *::before, *::after { box-sizing: inherit; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 Poppins, system-ui, sans-serif; transition: background-color 0.25s ease, color 0.25s ease; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 15px/1.5 Poppins, system-ui, sans-serif;
-      transition: background-color 0.25s ease, color 0.25s ease;
-    }
-
-    header {
-      background: radial-gradient(120% 160% at 50% 0, #0f7a52, #04281d);
-      color: #fff;
-      padding: 22px 16px 26px;
-      border-bottom: 3px solid var(--gold);
-      text-align: center;
-    }
-
-    .hd {
-      max-width: 880px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
+    header { background: radial-gradient(120% 160% at 50% 0, #0f7a52, #04281d); color: #fff; padding: 22px 16px 26px; border-bottom: 3px solid var(--gold); text-align: center; }
+    .hd { max-width: 880px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .hd svg { height: 64px; width: 64px; flex: none; }
     .hd-right { display: flex; align-items: center; gap: 10px; flex: none; }
-
-    .hd small {
-      display: block;
-      letter-spacing: 0.22em;
-      font-size: 10.5px;
-      color: var(--gl);
-      text-transform: uppercase;
-    }
-
-    .hd h1 {
-      font: 700 clamp(26px, 6.5vw, 44px)/1.1 Lora, Georgia, serif;
-      margin: 4px 0;
-      background: linear-gradient(#fff3c4, #d9ad45 60%, #f0d98a);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
+    .hd small { display: block; letter-spacing: 0.22em; font-size: 10.5px; color: var(--gl); text-transform: uppercase; }
+    .hd h1 { font: 700 clamp(26px, 6.5vw, 44px)/1.1 Lora, Georgia, serif; margin: 4px 0; background: linear-gradient(#fff3c4, #d9ad45 60%, #f0d98a); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hd p { margin: 0; font-size: 12.5px; letter-spacing: 0.08em; color: #e8f1ea; }
+    .theme-toggle { background: rgba(255,255,255,0.12); border: 1px solid rgba(240,217,138,0.45); color: var(--gl); width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; padding: 0; font-size: 18px; flex: none; transition: transform 0.2s ease, background 0.2s ease; }
+    .theme-toggle:hover { background: rgba(255,255,255,0.22); transform: scale(1.05); }
 
-    .theme-toggle {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(240, 217, 138, 0.45);
-      color: var(--gl);
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      font-size: 18px;
-      flex: none;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .theme-toggle:hover { background: rgba(255, 255, 255, 0.22); transform: scale(1.05); }
-
-    .ticker {
-      background: var(--ticker-bg);
-      color: #f6f2e6;
-      border-bottom: 1px solid var(--ticker-border);
-      display: flex;
-      align-items: stretch;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    }
-
-    .ticker-badge {
-      background: linear-gradient(135deg, #c79629, #a67818);
-      color: #071e14;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 8px 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      flex: none;
-      z-index: 2;
-      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
-    }
-
-    .ticker-track-wrap {
-      position: relative;
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      padding: 8px 0;
-    }
-
-    .ticker-track-wrap::before, .ticker-track-wrap::after {
-      content: "";
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 24px;
-      z-index: 1;
-      pointer-events: none;
-    }
-
+    .ticker { background: var(--ticker-bg); color: #f6f2e6; border-bottom: 1px solid var(--ticker-border); display: flex; align-items: stretch; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .ticker-badge { background: linear-gradient(135deg, #c79629, #a67818); color: #071e14; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; flex: none; z-index: 2; box-shadow: 4px 0 12px rgba(0,0,0,0.25); }
+    .ticker-track-wrap { position: relative; flex: 1; overflow: hidden; display: flex; align-items: center; padding: 8px 0; }
+    .ticker-track-wrap::before, .ticker-track-wrap::after { content: ""; position: absolute; top: 0; bottom: 0; width: 24px; z-index: 1; pointer-events: none; }
     .ticker-track-wrap::before { left: 0; background: linear-gradient(to right, var(--ticker-bg), transparent); }
     .ticker-track-wrap::after { right: 0; background: linear-gradient(to left, var(--ticker-bg), transparent); }
-
-    .ticker-track {
-      display: inline-flex;
-      white-space: nowrap;
-      will-change: transform;
-      animation: ticker-scroll 42s linear infinite;
-    }
-
+    .ticker-track { display: inline-flex; white-space: nowrap; will-change: transform; animation: ticker-scroll 42s linear infinite; }
     .ticker:hover .ticker-track, .ticker:active .ticker-track { animation-play-state: paused; }
-
-    .ticker-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      letter-spacing: 0.02em;
-      padding: 0 28px;
-      color: #f4eedc;
-    }
-
+    .ticker-item { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.02em; padding: 0 28px; color: #f4eedc; }
     .ticker-item .dot { color: var(--gl); font-size: 11px; }
-
-    @keyframes ticker-scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     main { max-width: 880px; margin: auto; padding: 16px; }
-
-    .pick {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-      display: grid;
-      gap: 10px;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
-    }
-
+    .pick { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 10px; box-shadow: 0 4px 18px rgba(0,0,0,0.03); }
     .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .row b { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mut); width: 64px; }
 
-    button, .btn {
-      font: 500 14px Poppins, sans-serif;
-      cursor: pointer;
-      border: 1px solid var(--line);
-      background: transparent;
-      color: var(--ink);
-      border-radius: 999px;
-      padding: 7px 16px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.18s ease;
-    }
-
+    button, .btn { font: 500 14px Poppins, sans-serif; cursor: pointer; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 7px 16px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.18s ease; }
     button:hover, .btn:hover { border-color: var(--gold); }
     button.on { background: var(--em); border-color: var(--em); color: #fff; font-weight: 600; }
 
-    .cd {
-      margin: 14px 0;
-      padding: 11px 16px;
-      border-radius: 12px;
-      background: linear-gradient(90deg, #0b5d3f, #0f7a52);
-      color: #fff;
-      font-size: 13.5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      border: 1px solid rgba(240, 217, 138, 0.3);
-    }
-
+    .cd { margin: 14px 0; padding: 11px 16px; border-radius: 12px; background: linear-gradient(90deg, #0b5d3f, #0f7a52); color: #fff; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border: 1px solid rgba(240,217,138,0.3); }
     .cd strong { color: var(--gl); font-weight: 600; }
 
     .days { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: thin; }
-
-    .days button {
-      flex: none;
-      text-align: center;
-      line-height: 1.25;
-      border-radius: 14px;
-      flex-direction: column;
-      padding: 9px 16px;
-      min-width: 105px;
-    }
-
+    .days button { flex: none; text-align: center; line-height: 1.25; border-radius: 14px; flex-direction: column; padding: 9px 16px; min-width: 105px; }
     .days button span { display: block; font-size: 11px; opacity: 0.8; }
     .days button.today { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
 
-    .s {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--gold);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-      display: grid;
-      grid-template-columns: 115px 1fr;
-      gap: 6px 14px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.025);
-    }
-
+    .s { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: grid; grid-template-columns: 115px 1fr; gap: 6px 14px; box-shadow: 0 3px 12px rgba(0,0,0,0.025); }
     .s.is-hidden-card { opacity: 0.62; border-left-color: #c0392b; }
     .s .t { font-size: 13px; color: var(--mut); }
     .s .t b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
-
-    .s h3 {
-      margin: 0;
-      font: 700 19px Lora, Georgia, serif;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
+    .s h3 { margin: 0; font: 700 19px Lora, Georgia, serif; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
     .sub-meta { font-size: 12.5px; color: var(--mut); margin-top: 2px; }
 
-    .live {
-      display: inline-block;
-      background: #c0392b;
-      color: #fff;
-      border-radius: 999px;
-      font: 600 10.5px Poppins, sans-serif;
-      padding: 2px 10px;
-      letter-spacing: 0.05em;
-      animation: pulse 2s infinite;
-    }
+    .live { display: inline-block; background: #c0392b; color: #fff; border-radius: 999px; font: 600 10.5px Poppins, sans-serif; padding: 2px 10px; letter-spacing: 0.05em; animation: pulse 2s infinite; }
+    .badge-done { display: inline-block; background: rgba(93,111,102,0.18); color: var(--mut); border-radius: 999px; font: 600 10.5px Poppins, sans-serif; padding: 2px 10px; }
+    .badge-lock { display: inline-block; background: rgba(185,138,36,0.16); color: var(--gold); border: 1px solid rgba(185,138,36,0.35); border-radius: 999px; font: 600 10.5px Poppins, sans-serif; padding: 2px 10px; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.72; } }
 
-    .badge-done {
-      display: inline-block;
-      background: rgba(93, 111, 102, 0.18);
-      color: var(--mut);
-      border-radius: 999px;
-      font: 600 10.5px Poppins, sans-serif;
-      padding: 2px 10px;
-    }
-
-    .badge-lock {
-      display: inline-block;
-      background: rgba(185, 138, 36, 0.16);
-      color: var(--gold);
-      border: 1px solid rgba(185, 138, 36, 0.35);
-      border-radius: 999px;
-      font: 600 10.5px Poppins, sans-serif;
-      padding: 2px 10px;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.72; }
-    }
-
-    .act {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: 8px;
-      padding-top: 10px;
-      border-top: 1px solid var(--line);
-    }
-
+    .act { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--line); }
     .tok-wrap { display: inline-flex; align-items: center; gap: 6px; }
-
-    .tok {
-      font: 600 20px ui-monospace, Menlo, monospace;
-      letter-spacing: 0.18em;
-      background: var(--tok);
-      border: 1px dashed var(--gold);
-      border-radius: 10px;
-      padding: 5px 14px;
-      user-select: all;
-    }
-
-    .tok.locked {
-      color: var(--mut);
-      border-color: var(--line);
-      user-select: none;
-      letter-spacing: 0.22em;
-    }
-
+    .tok { font: 600 20px ui-monospace, Menlo, monospace; letter-spacing: 0.18em; background: var(--tok); border: 1px dashed var(--gold); border-radius: 10px; padding: 5px 14px; user-select: all; }
+    .tok.locked { color: var(--mut); border-color: var(--line); user-select: none; letter-spacing: 0.22em; }
     .copy-btn { padding: 6px 12px; font-size: 12.5px; border-radius: 10px; }
-
     .go { background: var(--em); color: #fff; border-color: var(--em); font-weight: 500; }
     .go:hover { background: #094a32; border-color: #094a32; }
-
-    .btn-locked {
-      background: rgba(93, 111, 102, 0.14);
-      color: var(--mut);
-      border-color: var(--line);
-      cursor: not-allowed;
-      font-size: 13.5px;
-    }
-
+    .btn-locked { background: rgba(93,111,102,0.14); color: var(--mut); border-color: var(--line); cursor: not-allowed; font-size: 13.5px; }
     .none { color: var(--mut); font-size: 13px; font-style: italic; }
+    .brk { text-align: center; color: var(--mut); font-size: 12.5px; letter-spacing: 0.12em; padding: 6px 0 14px; text-transform: uppercase; }
 
-    .brk {
-      text-align: center;
-      color: var(--mut);
-      font-size: 12.5px;
-      letter-spacing: 0.12em;
-      padding: 6px 0 14px;
-      text-transform: uppercase;
-    }
-
-    .adm {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin: 16px 0 0;
-      padding: 12px 14px;
-      border: 1px dashed var(--gold);
-      border-radius: 12px;
-      font-size: 13px;
-      background: var(--card);
-    }
-
+    .adm { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 16px 0 0; padding: 12px 14px; border: 1px dashed var(--gold); border-radius: 12px; font-size: 13px; background: var(--card); }
     .adm[hidden], [hidden] { display: none !important; }
-
     .ed { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
-
-    .ed input {
-      font: 14px Poppins, sans-serif;
-      color: var(--ink);
-      background: var(--tok);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 8px 12px;
-      flex: 1 1 240px;
-      min-width: 0;
-    }
-
-    .ed input[data-f="token"] {
-      flex: 0 1 150px;
-      font-family: ui-monospace, Menlo, monospace;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
+    .ed input { font: 14px Poppins, sans-serif; color: var(--ink); background: var(--tok); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; flex: 1 1 240px; min-width: 0; }
+    .ed input[data-f="token"] { flex: 0 1 150px; font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
     .s.e { grid-template-columns: 1fr; }
     .s.e .ed input.tm { flex: 0 1 160px; }
     .s.e .ed input.jm { flex: 0 1 120px; }
-
     .dl { color: #c0392b; border-color: #c0392b; font-size: 12.5px; padding: 5px 12px; }
     .hd-btn { color: var(--gold); border-color: var(--gold); font-size: 12.5px; padding: 5px 12px; }
 
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--em);
-      color: #fff;
-      padding: 9px 18px;
-      border-radius: 999px;
-      font-size: 13px;
-      border: 1px solid var(--gl);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 99;
-    }
-
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--em); color: #fff; padding: 9px 18px; border-radius: 999px; font-size: 13px; border: 1px solid var(--gl); box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 99; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 23, 15, 0.72);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 120;
-    }
-
-    .modal-card {
-      background: var(--card);
-      border: 1px solid var(--gold);
-      border-radius: 18px;
-      padding: 22px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-      display: grid;
-      gap: 12px;
-    }
-
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(4,23,15,0.72); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 120; }
+    .modal-card { background: var(--card); border: 1px solid var(--gold); border-radius: 18px; padding: 22px; width: 100%; max-width: 380px; box-shadow: 0 16px 40px rgba(0,0,0,0.35); display: grid; gap: 12px; }
     .modal-card h2 { margin: 0; font: 700 20px Lora, Georgia, serif; color: var(--ink); }
     .modal-card p { margin: 0; font-size: 13px; color: var(--mut); }
     .modal-field { display: grid; gap: 5px; }
-
-    .modal-field label {
-      font-size: 11.5px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--mut);
-    }
-
-    .modal-field input {
-      font: 15px Poppins, sans-serif;
-      color: var(--ink);
-      background: var(--tok);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 9px 12px;
-      width: 100%;
-    }
-
-    .modal-field input[type="password"] {
-      font-family: ui-monospace, Menlo, monospace;
-      letter-spacing: 0.25em;
-      font-size: 18px;
-    }
-
+    .modal-field label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); }
+    .modal-field input { font: 15px Poppins, sans-serif; color: var(--ink); background: var(--tok); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; width: 100%; }
+    .modal-field input[type="password"] { font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.25em; font-size: 18px; }
     .modal-err { color: #c0392b; font-size: 12.5px; font-weight: 500; min-height: 18px; }
     .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
 
@@ -497,6 +125,10 @@
       .row b { width: 100%; }
       .ticker-badge { padding: 8px 10px; font-size: 10px; }
       .ticker-item { font-size: 12px; padding: 0 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track, .live { animation: none; }
+      .ticker-track-wrap { overflow-x: auto; }
     }
   </style>
 </head>
@@ -665,6 +297,8 @@
 <script>
   const GAS_URL = "https://script.google.com/macros/s/AKfycbxTdkbIgXe_mhSuLfNrb-4nfV5qPzhxq0zfYpBhH3N4EjrBWLKcbiPZihTo1xHW8CaY/exec";
   const EARLY_UNLOCK_MINUTES = 5;
+  const STORAGE_KEY = "asas_mtsn3subang_2026_v3";
+  const THEME_KEY = "asas_mtsn3subang_theme_v1";
 
   const MOTIVATION_QUOTES = [
     "Awali setiap soal dengan Bismillah, kerjakan dengan tenang, teliti, dan penuh rasa percaya diri.",
@@ -674,131 +308,37 @@
     "Periksa kembali seluruh jawaban sebelum klik Kirim, dan pastikan layar konfirmasi muncul sempurna."
   ];
 
-  const DEFAULT_SCHEDULE = [
-    {
-      id: "d1", day: "Senin", date: "2026-11-30", labelDate: "30 Nov 2026",
-      sessions: {
-        "7": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "MATEMATIKA", token: "MTK726", link: "https://forms.gle/exampleMTK7", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "B. INDONESIA", token: "BIN726", link: "https://forms.gle/exampleBIN7", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "AL-QURAN HADITS", token: "AQH726", link: "https://forms.gle/exampleAQH7", hidden: false }
-        ],
-        "8": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "MATEMATIKA", token: "MTK826", link: "https://forms.gle/exampleMTK8", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "B. INDONESIA", token: "BIN826", link: "https://forms.gle/exampleBIN8", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "AL-QURAN HADITS", token: "AQH826", link: "https://forms.gle/exampleAQH8", hidden: false }
-        ],
-        "9": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "MATEMATIKA", token: "MTK926", link: "https://forms.gle/exampleMTK9", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "B. INDONESIA", token: "BIN926", link: "https://forms.gle/exampleBIN9", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "AL-QURAN HADITS", token: "AQH926", link: "https://forms.gle/exampleAQH9", hidden: false }
-        ]
-      }
-    },
-    {
-      id: "d2", day: "Selasa", date: "2026-12-01", labelDate: "01 Des 2026",
-      sessions: {
-        "7": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "B. INGGRIS", token: "BIG726", link: "https://forms.gle/exampleBIG7", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "AKIDAH AKHLAK", token: "AAK726", link: "https://forms.gle/exampleAAK7", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "FIKIH", token: "FIK726", link: "https://forms.gle/exampleFIK7", hidden: false }
-        ],
-        "8": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "B. INGGRIS", token: "BIG826", link: "https://forms.gle/exampleBIG8", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "AKIDAH AKHLAK", token: "AAK826", link: "https://forms.gle/exampleAAK8", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "FIKIH", token: "FIK826", link: "https://forms.gle/exampleFIK8", hidden: false }
-        ],
-        "9": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "B. INGGRIS", token: "BIG926", link: "https://forms.gle/exampleBIG9", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "AKIDAH AKHLAK", token: "AAK926", link: "https://forms.gle/exampleAAK9", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "FIKIH", token: "FIK926", link: "https://forms.gle/exampleFIK9", hidden: false }
-        ]
-      }
-    },
-    {
-      id: "d3", day: "Rabu", date: "2026-12-02", labelDate: "02 Des 2026",
-      sessions: {
-        "7": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "IPA", token: "IPA726", link: "https://forms.gle/exampleIPA7", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "BAHASA ARAB", token: "BAR726", link: "https://forms.gle/exampleBAR7", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "BAHASA SUNDA", token: "BSU726", link: "https://forms.gle/exampleBSU7", hidden: false }
-        ],
-        "8": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "IPA", token: "IPA826", link: "https://forms.gle/exampleIPA8", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "BAHASA ARAB", token: "BAR826", link: "https://forms.gle/exampleBAR8", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "BAHASA SUNDA", token: "BSU826", link: "https://forms.gle/exampleBSU8", hidden: false }
-        ],
-        "9": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "IPA", token: "IPA926", link: "https://forms.gle/exampleIPA9", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "BAHASA ARAB", token: "BAR926", link: "https://forms.gle/exampleBAR9", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "BAHASA SUNDA", token: "BSU926", link: "https://forms.gle/exampleBSU9", hidden: false }
-        ]
-      }
-    },
-    {
-      id: "d4", day: "Kamis", date: "2026-12-03", labelDate: "03 Des 2026",
-      sessions: {
-        "7": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "PPKn", token: "PPK726", link: "https://forms.gle/examplePPK7", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "IPS", token: "IPS726", link: "https://forms.gle/exampleIPS7", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "SKI", token: "SKI726", link: "https://forms.gle/exampleSKI7", hidden: false }
-        ],
-        "8": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "PPKn", token: "PPK826", link: "https://forms.gle/examplePPK8", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "IPS", token: "IPS826", link: "https://forms.gle/exampleIPS8", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "SKI", token: "SKI826", link: "https://forms.gle/exampleSKI8", hidden: false }
-        ],
-        "9": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "PPKn", token: "PPK926", link: "https://forms.gle/examplePPK9", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "IPS", token: "IPS926", link: "https://forms.gle/exampleIPS9", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "SKI", token: "SKI926", link: "https://forms.gle/exampleSKI9", hidden: false }
-        ]
-      }
-    },
-    {
-      id: "d5", day: "Jum'at", date: "2026-12-04", labelDate: "04 Des 2026",
-      sessions: {
-        "7": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "INFORMATIKA", token: "INF726", link: "https://forms.gle/exampleINF7", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "SENI BUDAYA", token: "SBD726", link: "https://forms.gle/exampleSBD7", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" },
-          { jam: "Jam ke-4", time: "10.10 - 11.20", subject: "PENJASORKES", token: "PJK726", link: "https://forms.gle/examplePJK7", hidden: false }
-        ],
-        "8": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "INFORMATIKA", token: "INF826", link: "https://forms.gle/exampleINF8", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "SENI BUDAYA", token: "SBD826", link: "https://forms.gle/exampleSBD8", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" },
-          { jam: "Jam ke-4", time: "10.10 - 11.20", subject: "PENJASORKES", token: "PJK826", link: "https://forms.gle/examplePJK8", hidden: false }
-        ],
-        "9": [
-          { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "INFORMATIKA", token: "INF926", link: "https://forms.gle/exampleINF9", hidden: false },
-          { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "SENI BUDAYA", token: "SBD926", link: "https://forms.gle/exampleSBD9", hidden: false },
-          { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" },
-          { jam: "Jam ke-4", time: "10.10 - 11.20", subject: "PENJASORKES", token: "PJK926", link: "https://forms.gle/examplePJK9", hidden: false }
-        ]
-      }
-    }
-  ];
-
-  const STORAGE_KEY = "asas_mtsn3subang_2026_v3";
-  const THEME_KEY = "asas_mtsn3subang_theme_v1";
+  /* Kerangka jadwal. TOKEN & TAUTAN SENGAJA KOSONG di kode ini agar tidak bisa dibaca siswa
+     lewat "Lihat Sumber". Isi token/tautan hanya lewat Mode Proktor (tersimpan di Google Sheets). */
   const ROOMS_BY_GRADE = {
     "7": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
     "8": ["A", "B", "C", "D", "E", "F", "G", "H"],
     "9": ["A", "B", "C", "D", "E", "F", "G"]
   };
+
+  function buildDefaultSchedule() {
+    const days = [
+      ["Senin", "2026-11-30", "30 Nov 2026", ["MATEMATIKA", "B. INDONESIA", "AL-QURAN HADITS"]],
+      ["Selasa", "2026-12-01", "01 Des 2026", ["B. INGGRIS", "AKIDAH AKHLAK", "FIKIH"]],
+      ["Rabu", "2026-12-02", "02 Des 2026", ["IPA", "BAHASA ARAB", "BAHASA SUNDA"]],
+      ["Kamis", "2026-12-03", "03 Des 2026", ["PPKn", "IPS", "SKI"]],
+      ["Jum'at", "2026-12-04", "04 Des 2026", ["INFORMATIKA", "SENI BUDAYA", "PENJASORKES"]]
+    ];
+    return days.map((d, i) => {
+      const friday = i === 4;
+      const sessions = {};
+      ["7", "8", "9"].forEach(g => {
+        const mk = (jam, time, subject) => ({ jam, time, subject, token: "", link: "", hidden: false });
+        sessions[g] = [
+          mk("Jam ke-1", "07.00 - 08.30", d[3][0]),
+          mk("Jam ke-2", "08.30 - 10.00", d[3][1]),
+          { break: friday ? "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" : "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
+          mk("Jam ke-4", friday ? "10.10 - 11.20" : "10.30 - 12.00", d[3][2])
+        ];
+      });
+      return { id: "d" + (i + 1), day: d[0], date: d[1], labelDate: d[2], sessions };
+    });
+  }
 
   let proctorSession = { username: "", pin: "" };
   let state = {
@@ -807,15 +347,26 @@
     dayIndex: 0,
     adminMode: false,
     modalMode: "login",
-    schedule: loadLocalSchedule()
+    schedule: buildDefaultSchedule() // siswa tidak pernah membaca cache lokal
+  };
+
+  /* Akses penyimpanan lokal yang aman (bisa error di mode privat) */
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
 
   function escapeAttr(str = "") {
     return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
-
   function escapeHtml(str = "") {
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  /* Hanya perbarui DOM bila HTML berubah → isian proktor tidak terhapus tiap detik */
+  function setHtml(el, html) {
+    if (el._h !== html) { el._h = html; el.innerHTML = html; }
   }
 
   function renderTicker() {
@@ -824,17 +375,6 @@
       `<span class="ticker-item"><span class="dot">◆</span><span>${escapeHtml(q)}</span></span>`
     ).join("");
     track.innerHTML = singleSet + singleSet;
-  }
-
-  function loadLocalSchedule() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length) return parsed;
-      }
-    } catch (e) {}
-    return JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
   }
 
   function isGasConfigured() {
@@ -851,9 +391,7 @@
       const json = await res.json();
       if (json.status === "ok" && Array.isArray(json.data) && json.data.length > 0) {
         state.schedule = json.data;
-        if (state.adminMode) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(json.data));
-        }
+        if (state.adminMode) store.set(STORAGE_KEY, JSON.stringify(json.data));
         renderDays();
         updateClockAndStatus();
       } else if (json.status === "empty" && proctorSession.pin) {
@@ -865,7 +403,7 @@
   }
 
   async function saveSchedule(data = state.schedule) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    store.set(STORAGE_KEY, JSON.stringify(data));
     if (!isGasConfigured() || !proctorSession.pin) return;
 
     showToast("Menyimpan ke Google Sheets...");
@@ -907,20 +445,18 @@
       hour12: false
     }).formatToParts(now);
     const map = Object.fromEntries(parts.map(p => [p.type, p.value]));
+    const hh = map.hour === "24" ? "00" : map.hour;
     return {
       dateStr: `${map.year}-${map.month}-${map.day}`,
-      seconds: (+map.hour) * 3600 + (+map.minute) * 60 + (+map.second),
-      clockStr: `${map.hour}:${map.minute}:${map.second} WIB`
+      seconds: (+hh) * 3600 + (+map.minute) * 60 + (+map.second),
+      clockStr: `${hh}:${map.minute}:${map.second} WIB`
     };
   }
 
   function parseTimeRangeSec(rangeStr = "") {
     const m = rangeStr.match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
     if (!m) return null;
-    return {
-      start: (+m[1]) * 3600 + (+m[2]) * 60,
-      end: (+m[3]) * 3600 + (+m[4]) * 60
-    };
+    return { start: (+m[1]) * 3600 + (+m[2]) * 60, end: (+m[3]) * 3600 + (+m[4]) * 60 };
   }
 
   function getSessionStatus(dayDate, timeRangeStr, wib) {
@@ -960,7 +496,7 @@
     const container = document.getElementById("scheduleList");
     const dayObj = state.schedule[state.dayIndex];
     if (!dayObj) {
-      container.innerHTML = `<p class="none">Jadwal hari ini belum tersedia.</p>`;
+      setHtml(container, `<p class="none">Jadwal hari ini belum tersedia.</p>`);
       return;
     }
 
@@ -968,7 +504,7 @@
     const list = state.adminMode ? rawList : rawList.filter(item => !item.hidden);
 
     if (!list.length) {
-      container.innerHTML = `<p class="none">Belum ada sesi ujian yang ditampilkan untuk Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)} pada hari ${escapeHtml(dayObj.day)}.</p>`;
+      setHtml(container, `<p class="none">Belum ada sesi ujian yang ditampilkan untuk Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)} pada hari ${escapeHtml(dayObj.day)}.</p>`);
       return;
     }
 
@@ -982,7 +518,7 @@
       }
     }
 
-    container.innerHTML = list.map((item, idx) => {
+    setHtml(container, list.map((item, idx) => {
       if (item.break) {
         return `<div class="brk">${escapeHtml(item.break)}</div>`;
       }
@@ -994,11 +530,11 @@
         return `
           <div class="s e ${item.hidden ? "is-hidden-card" : ""}" data-idx="${idx}">
             <div class="ed">
-              <input class="jm" data-f="jam" value="${escapeAttr(item.jam || "")}" placeholder="Jam ke-1">
-              <input class="tm" data-f="time" value="${escapeAttr(item.time || "")}" placeholder="07.00 - 08.30">
-              <input data-f="subject" value="${escapeAttr(item.subject || "")}" placeholder="Mata Pelajaran">
-              <input data-f="token" value="${escapeAttr(item.token || "")}" placeholder="TOKEN">
-              <input data-f="link" value="${escapeAttr(item.link || "")}" placeholder="https://...">
+              <input class="jm" data-f="jam" value="${escapeAttr(item.jam || "")}" placeholder="Jam ke-1" aria-label="Jam ke">
+              <input class="tm" data-f="time" value="${escapeAttr(item.time || "")}" placeholder="07.00 - 08.30" aria-label="Waktu">
+              <input data-f="subject" value="${escapeAttr(item.subject || "")}" placeholder="Mata Pelajaran" aria-label="Mata pelajaran">
+              <input data-f="token" value="${escapeAttr(item.token || "")}" placeholder="TOKEN" aria-label="Token">
+              <input data-f="link" value="${escapeAttr(item.link || "")}" placeholder="https://..." aria-label="Tautan soal">
             </div>
             <div class="act">
               <button type="button" class="go btn-save-row">Simpan</button>
@@ -1045,7 +581,7 @@
           </div>
         </article>
       `;
-    }).join("");
+    }).join(""));
   }
 
   function updateClockAndStatus() {
@@ -1055,22 +591,24 @@
     const firstDate = state.schedule[0]?.date;
     const lastDate = state.schedule[state.schedule.length - 1]?.date;
     const statusText = document.getElementById("statusText");
+    let html;
 
     if (firstDate && wib.dateStr < firstDate) {
-      statusText.innerHTML = `Pelaksanaan ASAS Ganjil dimulai <strong>${escapeHtml(state.schedule[0].day)}, ${escapeHtml(state.schedule[0].labelDate)}</strong> pukul <strong>07.00 WIB</strong>.`;
+      html = `Pelaksanaan ASAS Ganjil dimulai <strong>${escapeHtml(state.schedule[0].day)}, ${escapeHtml(state.schedule[0].labelDate)}</strong> pukul <strong>07.00 WIB</strong>.`;
     } else if (lastDate && wib.dateStr > lastDate) {
-      statusText.innerHTML = `Rangkaian jadwal ASAS Ganjil (<strong>${escapeHtml(state.schedule[0].labelDate)} – ${escapeHtml(state.schedule[state.schedule.length - 1].labelDate)}</strong>) telah selesai.`;
+      html = `Rangkaian jadwal ASAS Ganjil (<strong>${escapeHtml(state.schedule[0].labelDate)} – ${escapeHtml(state.schedule[state.schedule.length - 1].labelDate)}</strong>) telah selesai.`;
     } else {
       const todayIdx = state.schedule.findIndex(d => d.date === wib.dateStr);
       const activeDay = todayIdx >= 0 ? state.schedule[todayIdx] : state.schedule[state.dayIndex];
       const sessions = (activeDay?.sessions?.[state.grade] || []).filter(x => !x.break && !x.hidden);
       const liveItem = sessions.find(x => getSessionStatus(activeDay.date, x.time, wib) === "live");
       if (liveItem) {
-        statusText.innerHTML = `Sesi aktif Kelas <strong>${escapeHtml(state.grade)}${escapeHtml(state.room)}</strong>: <strong>${escapeHtml(liveItem.subject)}</strong> (${escapeHtml(liveItem.time)} WIB)`;
+        html = `Sesi aktif Kelas <strong>${escapeHtml(state.grade)}${escapeHtml(state.room)}</strong>: <strong>${escapeHtml(liveItem.subject)}</strong> (${escapeHtml(liveItem.time)} WIB)`;
       } else {
-        statusText.innerHTML = `Menampilkan jadwal <strong>Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)}</strong> · <strong>${escapeHtml(activeDay?.day || "")}</strong>`;
+        html = `Menampilkan jadwal <strong>Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)}</strong> · <strong>${escapeHtml(activeDay?.day || "")}</strong>`;
       }
     }
+    setHtml(statusText, html);
 
     renderSchedule(wib);
   }
@@ -1180,6 +718,7 @@
 
   document.getElementById("btnCancelModal").addEventListener("click", closeModal);
   modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
 
   document.getElementById("rowGrade").addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-g]");
@@ -1211,8 +750,21 @@
     if (copyBtn) {
       const tok = copyBtn.dataset.token || "";
       if (!tok || tok === "-") return;
-      navigator.clipboard?.writeText(tok).catch(() => {});
-      showToast(`Token ${tok} disalin!`);
+      try {
+        await navigator.clipboard.writeText(tok);
+        showToast(`Token ${tok} disalin!`);
+      } catch (err) {
+        // Cadangan: pilih teks token agar bisa disalin manual
+        const tokEl = copyBtn.previousElementSibling;
+        if (tokEl) {
+          const r = document.createRange();
+          r.selectNodeContents(tokEl);
+          const sel = getSelection();
+          sel.removeAllRanges();
+          sel.addRange(r);
+        }
+        showToast("Token terpilih — tekan Salin (Ctrl+C) secara manual");
+      }
       return;
     }
 
@@ -1240,6 +792,7 @@
       renderSchedule();
       await saveSchedule();
     } else if (e.target.closest(".btn-del-row")) {
+      if (!confirm("Hapus sesi ini?")) return;
       list.splice(idx, 1);
       renderSchedule();
       await saveSchedule();
@@ -1254,8 +807,8 @@
       jam: "Jam ke-5",
       time: "12.00 - 13.00",
       subject: "MATA PELAJARAN BARU",
-      token: "NEW726",
-      link: "https://forms.gle/",
+      token: "",
+      link: "",
       hidden: false
     });
     renderSchedule();
@@ -1265,7 +818,8 @@
   document.getElementById("btnChangePin").addEventListener("click", () => openModal("changePin"));
 
   document.getElementById("btnResetData").addEventListener("click", async () => {
-    state.schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+    if (!confirm("Kembalikan jadwal ke default? Seluruh token dan tautan akan dikosongkan.")) return;
+    state.schedule = buildDefaultSchedule();
     renderDays();
     updateClockAndStatus();
     await saveSchedule();
@@ -1274,10 +828,13 @@
   document.getElementById("btnCloseAdmin").addEventListener("click", async () => {
     state.adminMode = false;
     proctorSession = { username: "", pin: "" };
+    store.del(STORAGE_KEY);                 // hapus cache token di perangkat
+    state.schedule = buildDefaultSchedule(); // buang data proktor dari memori
     document.getElementById("adminBar").hidden = true;
     document.getElementById("toggleAdminLink").textContent = "Login Proktor";
+    renderDays();
+    updateClockAndStatus();
     await fetchCloudSchedule();
-    renderSchedule();
     showToast("Keluar dari mode proktor");
   });
 
@@ -1301,13 +858,13 @@
   function applyTheme(theme) {
     if (theme === "dark" || theme === "light") {
       document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem(THEME_KEY, theme);
+      store.set(THEME_KEY, theme);
     } else {
       document.documentElement.removeAttribute("data-theme");
-      localStorage.removeItem(THEME_KEY);
+      store.del(THEME_KEY);
     }
   }
-  const savedTheme = localStorage.getItem(THEME_KEY);
+  const savedTheme = store.get(THEME_KEY);
   if (savedTheme) applyTheme(savedTheme);
 
   btnTheme.addEventListener("click", () => {
@@ -1328,6 +885,12 @@
   updateClockAndStatus();
   fetchCloudSchedule();
   setInterval(updateClockAndStatus, 1000);
+
+  // Segarkan jadwal & token otomatis untuk siswa (tidak mengganggu pengeditan proktor)
+  setInterval(() => { if (!state.adminMode && !document.hidden) fetchCloudSchedule(); }, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && !state.adminMode) fetchCloudSchedule();
+  });
 </script>
 </body>
 </html>
