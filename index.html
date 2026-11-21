@@ -558,6 +558,90 @@
       display: none !important;
     }
 
+    .locked-summary {
+      margin-top: 12px;
+      background: var(--card);
+      border: 1px solid #c0392b;
+      border-left: 4px solid #c0392b;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(192, 57, 43, 0.08);
+    }
+
+    .locked-summary-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .locked-summary-hd h4 {
+      margin: 0;
+      font: 700 16px Lora, Georgia, serif;
+      color: #c0392b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .locked-count-pill {
+      background: #c0392b;
+      color: #fff;
+      font: 600 11.5px Poppins, sans-serif;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    .locked-summary-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .locked-item-row {
+      background: var(--tok);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .locked-item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .locked-item-meta strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .locked-item-meta span {
+      font-size: 12px;
+      color: var(--mut);
+    }
+
+    .locked-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .jump-btn {
+      padding: 5px 11px;
+      font-size: 12px;
+    }
+
     .ed {
       display: flex;
       flex-wrap: wrap;
@@ -1034,6 +1118,17 @@
     <button type="button" id="btnCloseAdmin">Keluar Proktor</button>
   </div>
 
+  <section class="locked-summary" id="lockedSummaryPanel" hidden aria-label="Ringkasan Sesi Terkunci">
+    <div class="locked-summary-hd">
+      <h4>
+        <span>Ringkasan Sesi Terkunci</span>
+        <span class="locked-count-pill" id="lockedCountBadge">0</span>
+      </h4>
+      <button type="button" class="unlock-btn" id="btnUnlockAllGlobal">Buka Semua Kunci</button>
+    </div>
+    <div class="locked-summary-list" id="lockedSummaryList"></div>
+  </section>
+
   <p class="note">
     Soal dibuka dalam mode layar penuh anti-curang.
     · <a id="toggleAdminLink" role="button" tabindex="0">Login Proktor</a>
@@ -1109,8 +1204,8 @@
   const LOCKED_SESSIONS_KEY = "asas_mtsn3_2026_locked_sessions";
 
   const ROMBELS = {
-    "7": ["A", "B", "C", "D", "E", "F", "G"],
-    "8": ["A", "B", "C", "D", "E", "F", "G"],
+    "7": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+    "8": ["A", "B", "C", "D", "E", "F", "G", "H"],
     "9": ["A", "B", "C", "D", "E", "F", "G"]
   };
 
@@ -1126,984 +1221,4 @@
     if (dayCode === "d1") {
       return [
         { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "MATEMATIKA", token: `MTK${grade}26`, link: `https://forms.gle/exampleMTK${grade}` },
-        { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "B. INDONESIA", token: `BIN${grade}26`, link: `https://forms.gle/exampleBIN${grade}` },
-        { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-        { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "AL-QURAN HADITS", token: `AQH${grade}26`, link: `https://forms.gle/exampleAQH${grade}` }
-      ];
-    }
-    if (dayCode === "d2") {
-      return [
-        { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "B. INGGRIS", token: `BIG${grade}26`, link: `https://forms.gle/exampleBIG${grade}` },
-        { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "AKIDAH AKHLAK", token: `AAK${grade}26`, link: `https://forms.gle/exampleAAK${grade}` },
-        { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-        { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "FIKIH", token: `FIK${grade}26`, link: `https://forms.gle/exampleFIK${grade}` }
-      ];
-    }
-    if (dayCode === "d3") {
-      return [
-        { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "IPA", token: `IPA${grade}26`, link: `https://forms.gle/exampleIPA${grade}` },
-        { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "BAHASA ARAB", token: `BAR${grade}26`, link: `https://forms.gle/exampleBAR${grade}` },
-        { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-        { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "BAHASA SUNDA", token: `BSU${grade}26`, link: `https://forms.gle/exampleBSU${grade}` }
-      ];
-    }
-    if (dayCode === "d4") {
-      return [
-        { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "PPKn", token: `PPK${grade}26`, link: `https://forms.gle/examplePPK${grade}` },
-        { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "IPS", token: `IPS${grade}26`, link: `https://forms.gle/exampleIPS${grade}` },
-        { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-        { jam: "Jam ke-4", time: "10.30 - 12.00", subject: "SKI", token: `SKI${grade}26`, link: `https://forms.gle/exampleSKI${grade}` }
-      ];
-    }
-    return [
-      { jam: "Jam ke-1", time: "07.00 - 08.30", subject: "INFORMATIKA", token: `INF${grade}26`, link: `https://forms.gle/exampleINF${grade}` },
-      { jam: "Jam ke-2", time: "08.30 - 10.00", subject: "SENI BUDAYA", token: `SBD${grade}26`, link: `https://forms.gle/exampleSBD${grade}` },
-      { break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" },
-      { jam: "Jam ke-4", time: "10.10 - 11.20", subject: "PENJASORKES", token: `PJK${grade}26`, link: `https://forms.gle/examplePJK${grade}` }
-    ];
-  }
-
-  function buildDefaultSchedule() {
-    const daysMeta = [
-      { id: "d1", day: "Senin", date: "2026-11-30", labelDate: "30 Nov 2026" },
-      { id: "d2", day: "Selasa", date: "2026-12-01", labelDate: "01 Des 2026" },
-      { id: "d3", day: "Rabu", date: "2026-12-02", labelDate: "02 Des 2026" },
-      { id: "d4", day: "Kamis", date: "2026-12-03", labelDate: "03 Des 2026" },
-      { id: "d5", day: "Jum'at", date: "2026-12-04", labelDate: "04 Des 2026" }
-    ];
-    return daysMeta.map(d => ({
-      ...d,
-      sessions: {
-        "7": makeDaySessions("7", d.id),
-        "8": makeDaySessions("8", d.id),
-        "9": makeDaySessions("9", d.id)
-      }
-    }));
-  }
-
-  function getSavedMaxStrikes() {
-    const v = Number(localStorage.getItem(MAX_STRIKES_KEY));
-    return Number.isFinite(v) && v >= 1 && v <= 20 ? v : 6;
-  }
-
-  function getLockedSessions() {
-    try {
-      const raw = JSON.parse(localStorage.getItem(LOCKED_SESSIONS_KEY) || "[]");
-      return new Set(Array.isArray(raw) ? raw : []);
-    } catch {
-      return new Set();
-    }
-  }
-
-  function saveLockedSessionsSet(set) {
-    try {
-      localStorage.setItem(LOCKED_SESSIONS_KEY, JSON.stringify(Array.from(set)));
-    } catch {}
-  }
-
-  function setLocalLockState(sessionKey, isLocked) {
-    const set = getLockedSessions();
-    if (isLocked) set.add(sessionKey);
-    else set.delete(sessionKey);
-    saveLockedSessionsSet(set);
-  }
-
-  let scheduleData = loadCachedSchedule();
-  let state = {
-    grade: "7",
-    room: "A",
-    dayId: scheduleData[0]?.id || "d1",
-    isProctor: false,
-    proctorUser: "",
-    proctorPin: "",
-    modalMode: "login",
-    maxStrikes: getSavedMaxStrikes(),
-    exam: {
-      active: false,
-      key: "",
-      subject: "",
-      link: "",
-      strikes: 0,
-      locked: false,
-      wakeLock: null,
-      lastStrikeAt: 0
-    }
-  };
-
-  function loadCachedSchedule() {
-    try {
-      const raw = localStorage.getItem(CACHE_KEY);
-      if (!raw) return buildDefaultSchedule();
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) && parsed.length ? parsed : buildDefaultSchedule();
-    } catch {
-      return buildDefaultSchedule();
-    }
-  }
-
-  function saveCachedSchedule() {
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(scheduleData));
-    } catch {}
-  }
-
-  function showToast(msg) {
-    const el = document.getElementById("toast");
-    el.textContent = msg;
-    el.classList.add("show");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => el.classList.remove("show"), 2400);
-  }
-
-  function escapeHtml(str) {
-    return String(str ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
-
-  function initTicker() {
-    const track = document.getElementById("tickerTrack");
-    track.innerHTML = [...MOTIVATION_QUOTES, ...MOTIVATION_QUOTES]
-      .map(q => `<span class="ticker-item"><span class="dot">◆</span><span>${escapeHtml(q)}</span></span>`)
-      .join("");
-  }
-
-  function getWibNowParts() {
-    const now = new Date();
-    const isoDate = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Jakarta",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    }).format(now);
-    const timeStr = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Jakarta",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false
-    }).format(now);
-    const [hh, mm] = timeStr.split(":").map(Number);
-    return { isoDate, timeStr, minutesOfDay: hh * 60 + mm };
-  }
-
-  function parseTimeRangeToMinutes(rangeStr) {
-    const match = String(rangeStr || "").match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
-    if (!match) return null;
-    return {
-      start: Number(match[1]) * 60 + Number(match[2]),
-      end: Number(match[3]) * 60 + Number(match[4])
-    };
-  }
-
-  function getSessionStatus(dayIsoDate, timeRangeStr, wib) {
-    const parsed = parseTimeRangeToMinutes(timeRangeStr);
-    if (!parsed) return "upcoming";
-    if (wib.isoDate < dayIsoDate) return "upcoming";
-    if (wib.isoDate > dayIsoDate) return "done";
-    if (wib.minutesOfDay < parsed.start) return "upcoming";
-    if (wib.minutesOfDay <= parsed.end) return "live";
-    return "done";
-  }
-
-  function selectTodayTabIfAvailable() {
-    const wib = getWibNowParts();
-    const todayMatch = scheduleData.find(d => d.date === wib.isoDate);
-    if (todayMatch) {
-      state.dayId = todayMatch.id;
-    } else if (!scheduleData.some(d => d.id === state.dayId)) {
-      state.dayId = scheduleData[0]?.id || "d1";
-    }
-  }
-
-  function updateClockAndStatus() {
-    const wib = getWibNowParts();
-    document.getElementById("clockDisplay").textContent = `${wib.timeStr} WIB`;
-
-    const activeDay = scheduleData.find(d => d.id === state.dayId) || scheduleData[0];
-    const sessions = activeDay?.sessions?.[state.grade] || [];
-    const statusEl = document.getElementById("statusText");
-
-    let liveItem = null;
-    let nextItem = null;
-
-    for (const item of sessions) {
-      if (item.break || !item.time) continue;
-      const st = getSessionStatus(activeDay.date, item.time, wib);
-      if (st === "live" && !liveItem) liveItem = item;
-      if (st === "upcoming" && !nextItem) nextItem = item;
-    }
-
-    if (liveItem) {
-      statusEl.innerHTML = `Sedang berlangsung (${escapeHtml(activeDay.day)}): <strong>${escapeHtml(liveItem.subject)}</strong> · Kelas ${state.grade}${state.room}`;
-    } else if (nextItem) {
-      statusEl.innerHTML = `Sesi berikutnya (${escapeHtml(activeDay.day)}): <strong>${escapeHtml(nextItem.subject)}</strong> (${escapeHtml(nextItem.time)} WIB)`;
-    } else if (activeDay) {
-      statusEl.innerHTML = `Jadwal <strong>${escapeHtml(activeDay.day)}, ${escapeHtml(activeDay.labelDate)}</strong> · Kelas ${state.grade}${state.room}`;
-    }
-
-    document.querySelectorAll(".s[data-session-range]").forEach(card => {
-      const st = getSessionStatus(card.dataset.dayDate, card.dataset.sessionRange, wib);
-      const badge = card.querySelector("[data-status-badge]");
-      if (!badge) return;
-      if (st === "live") {
-        badge.className = "live";
-        badge.textContent = "SEDANG BERLANGSUNG";
-      } else if (st === "done") {
-        badge.className = "badge-done";
-        badge.textContent = "SELESAI";
-      } else {
-        badge.className = "";
-        badge.textContent = "";
-      }
-    });
-  }
-
-  function renderRooms() {
-    const rowRoom = document.getElementById("rowRoom");
-    const rooms = ROMBELS[state.grade] || ["A", "B", "C"];
-    if (!rooms.includes(state.room)) state.room = rooms[0];
-
-    rowRoom.innerHTML = `<b>Rombel</b>` + rooms.map(r =>
-      `<button type="button" data-r="${r}" class="${state.room === r ? "on" : ""}">${state.grade}${r}</button>`
-    ).join("");
-  }
-
-  function renderDayTabs() {
-    const wib = getWibNowParts();
-    const tabsEl = document.getElementById("dayTabs");
-    tabsEl.innerHTML = scheduleData.map(d => {
-      const isSelected = d.id === state.dayId;
-      const isToday = d.date === wib.isoDate;
-      return `
-        <button type="button" data-day="${escapeHtml(d.id)}" class="${isSelected ? "on" : ""} ${isToday ? "today" : ""}">
-          ${escapeHtml(d.day)}
-          <span>${escapeHtml(d.labelDate)}${isToday ? " · Hari Ini" : ""}</span>
-        </button>
-      `;
-    }).join("");
-  }
-
-  function buildSessionKey(dayId, grade, room, idx, item) {
-    return `${dayId}|${grade}${room}|${idx}|${item.subject || ""}|${item.token || ""}`;
-  }
-
-  function renderSchedule() {
-    const listEl = document.getElementById("scheduleList");
-    const activeDay = scheduleData.find(d => d.id === state.dayId) || scheduleData[0];
-    if (!activeDay) {
-      listEl.innerHTML = `<p class="none">Belum ada jadwal tersedia.</p>`;
-      return;
-    }
-
-    const sessions = activeDay.sessions[state.grade] || [];
-    if (!sessions.length && !state.isProctor) {
-      listEl.innerHTML = `<p class="none">Tidak ada sesi ujian untuk tingkat ini pada hari ${escapeHtml(activeDay.day)}.</p>`;
-      return;
-    }
-
-    const wib = getWibNowParts();
-    const lockedSet = getLockedSessions();
-
-    listEl.innerHTML = sessions.map((item, idx) => {
-      if (item.break !== undefined) {
-        if (state.isProctor) {
-          return `
-            <div class="brk" data-idx="${idx}">
-              <input type="text" data-f="break" value="${escapeHtml(item.break)}" placeholder="Jam ke-3 · ISTIRAHAT (10.00 - 10.30)">
-              <button type="button" class="dl" data-del-idx="${idx}">Hapus</button>
-            </div>
-          `;
-        }
-        return `<div class="brk">${escapeHtml(item.break)}</div>`;
-      }
-
-      const sessionKey = buildSessionKey(activeDay.id, state.grade, state.room, idx, item);
-      const isLocked = lockedSet.has(sessionKey);
-
-      if (state.isProctor) {
-        const lockActionBtn = isLocked
-          ? `<button type="button" class="unlock-btn" data-unlock-key="${escapeHtml(sessionKey)}">Buka Kunci Sesi</button>`
-          : `<button type="button" class="lock-btn" data-lock-key="${escapeHtml(sessionKey)}">Kunci Sesi</button>`;
-
-        return `
-          <article class="s e" data-idx="${idx}">
-            <div class="ed">
-              <input type="text" class="jm" data-f="jam" value="${escapeHtml(item.jam || "")}" placeholder="Jam ke-1">
-              <input type="text" class="tm" data-f="time" value="${escapeHtml(item.time || "")}" placeholder="07.00 - 08.30">
-              <input type="text" data-f="subject" value="${escapeHtml(item.subject || "")}" placeholder="Mata Pelajaran">
-              <input type="text" class="tk" data-f="token" value="${escapeHtml(item.token || "")}" placeholder="TOKEN">
-              <input type="url" data-f="link" value="${escapeHtml(item.link || "")}" placeholder="https://forms.gle/...">
-              <button type="button" class="dl" data-del-idx="${idx}">Hapus</button>
-            </div>
-            <div class="proctor-lock-strip">
-              <span>Status Kunci: <strong>${isLocked ? "TERKUNCI (Sinkron Server)" : "Normal"}</strong></span>
-              ${lockActionBtn}
-            </div>
-          </article>
-        `;
-      }
-
-      const st = getSessionStatus(activeDay.date, item.time, wib);
-      const badgeHtml = isLocked
-        ? `<span class="badge-locked">TERKUNCI</span>`
-        : st === "live"
-          ? `<span class="live" data-status-badge>SEDANG BERLANGSUNG</span>`
-          : st === "done"
-            ? `<span class="badge-done" data-status-badge>SELESAI</span>`
-            : `<span data-status-badge></span>`;
-
-      const hasValidLink = item.link && /^https?:\/\//i.test(item.link);
-
-      const actionBtnHtml = isLocked
-        ? `<button type="button" class="dl" disabled>Terkunci (Hubungi Proktor)</button>`
-        : hasValidLink
-          ? `<button type="button" class="go" data-open-exam="${idx}">Buka Soal (Anti-Curang)</button>`
-          : `<span class="none">Tautan soal belum tersedia</span>`;
-
-      return `
-        <article class="s" data-day-date="${escapeHtml(activeDay.date)}" data-session-range="${escapeHtml(item.time || "")}">
-          <div class="t">
-            <b>${escapeHtml(item.jam || "Sesi")}</b>
-            <span>${escapeHtml(item.time || "-")} WIB</span>
-          </div>
-          <div>
-            <h3>${escapeHtml(item.subject || "Mata Pelajaran")} ${badgeHtml}</h3>
-            <div class="sub-meta">Peserta: Kelas ${state.grade}${state.room} · ${escapeHtml(activeDay.day)}, ${escapeHtml(activeDay.labelDate)} · Maks. ${state.maxStrikes}x pelanggaran</div>
-          </div>
-          <div class="act">
-            <div class="tok-wrap">
-              <span class="tok" aria-label="Token ujian">${escapeHtml(item.token || "-")}</span>
-              <button type="button" class="copy-btn" data-copy-token="${escapeHtml(item.token || "")}">Salin Token</button>
-            </div>
-            ${actionBtnHtml}
-          </div>
-        </article>
-      `;
-    }).join("");
-
-    updateClockAndStatus();
-  }
-
-  async function requestExamFullscreen() {
-    const stage = document.getElementById("examStage");
-    try {
-      if (!document.fullscreenElement && stage.requestFullscreen) {
-        await stage.requestFullscreen();
-      }
-    } catch {}
-  }
-
-  async function exitExamFullscreen() {
-    try {
-      if (document.fullscreenElement && document.exitFullscreen) {
-        await document.exitFullscreen();
-      }
-    } catch {}
-  }
-
-  async function acquireWakeLock() {
-    try {
-      if ("wakeLock" in navigator && navigator.wakeLock?.request) {
-        state.exam.wakeLock = await navigator.wakeLock.request("screen");
-      }
-    } catch {}
-  }
-
-  async function releaseWakeLock() {
-    try {
-      if (state.exam.wakeLock) {
-        await state.exam.wakeLock.release();
-        state.exam.wakeLock = null;
-      }
-    } catch {}
-  }
-
-  function updateStrikeBadge() {
-    const pill = document.getElementById("strikePill");
-    pill.textContent = `Pelanggaran: ${state.exam.strikes} / ${state.maxStrikes}`;
-    pill.classList.toggle("warn", state.exam.strikes > 0);
-  }
-
-  async function triggerViolation(reasonText) {
-    if (!state.exam.active || state.exam.locked) return;
-    const now = Date.now();
-    if (now - state.exam.lastStrikeAt < 900) return;
-    state.exam.lastStrikeAt = now;
-
-    state.exam.strikes += 1;
-    updateStrikeBadge();
-
-    if (state.exam.strikes >= state.maxStrikes) {
-      state.exam.locked = true;
-      setLocalLockState(state.exam.key, true);
-      document.getElementById("examFrame").src = "about:blank";
-      document.getElementById("examAlertOverlay").hidden = true;
-      document.getElementById("examLockDesc").textContent =
-        `Pelanggaran mencapai ${state.exam.strikes} dari maksimal ${state.maxStrikes} kali (${reasonText}). Akses soal untuk sesi ini telah dikunci dan disinkronkan ke server.`;
-      document.getElementById("examLockOverlay").hidden = false;
-      renderSchedule();
-
-      try {
-        await postToGas({
-          action: "lockSession",
-          sessionKey: state.exam.key,
-          reason: reasonText,
-          studentInfo: `Kelas ${state.grade}${state.room} · ${state.exam.subject}`
-        });
-      } catch {}
-      return;
-    }
-
-    document.getElementById("examAlertReason").textContent = reasonText;
-    document.getElementById("examAlertCounter").textContent =
-      `Pelanggaran ke-${state.exam.strikes} dari batas maksimal ${state.maxStrikes} kali.`;
-    document.getElementById("examAlertOverlay").hidden = false;
-  }
-
-  async function startAntiCheatExam(sessionIdx) {
-    const activeDay = scheduleData.find(d => d.id === state.dayId) || scheduleData[0];
-    const item = activeDay?.sessions?.[state.grade]?.[sessionIdx];
-    if (!item || !item.link || !/^https?:\/\//i.test(item.link)) {
-      showToast("Tautan soal tidak valid");
-      return;
-    }
-
-    const sessionKey = buildSessionKey(activeDay.id, state.grade, state.room, sessionIdx, item);
-    if (getLockedSessions().has(sessionKey)) {
-      showToast("Sesi ini sedang dikunci. Minta proktor membuka kunci.");
-      renderSchedule();
-      return;
-    }
-
-    state.exam.active = true;
-    state.exam.key = sessionKey;
-    state.exam.subject = item.subject || "UJIAN ASAS";
-    state.exam.link = item.link;
-    state.exam.strikes = 0;
-    state.exam.locked = false;
-    state.exam.lastStrikeAt = Date.now();
-
-    document.getElementById("examSubjectTitle").textContent = `${state.exam.subject} · Kelas ${state.grade}${state.room}`;
-    document.getElementById("examMetaInfo").textContent = `${activeDay.day}, ${activeDay.labelDate} · ${item.jam || ""} (${item.time || ""} WIB)`;
-    document.getElementById("examAlertOverlay").hidden = true;
-    document.getElementById("examLockOverlay").hidden = true;
-    document.getElementById("examFrame").src = item.link;
-    updateStrikeBadge();
-
-    document.getElementById("examStage").hidden = false;
-    await requestExamFullscreen();
-    await acquireWakeLock();
-  }
-
-  async function stopAntiCheatExam() {
-    state.exam.active = false;
-    state.exam.locked = false;
-    document.getElementById("examFrame").src = "about:blank";
-    document.getElementById("examAlertOverlay").hidden = true;
-    document.getElementById("examLockOverlay").hidden = true;
-    document.getElementById("examStage").hidden = true;
-    await releaseWakeLock();
-    await exitExamFullscreen();
-    renderSchedule();
-  }
-
-  function attachProctorEditListeners() {
-    const listEl = document.getElementById("scheduleList");
-    listEl.querySelectorAll("input[data-f]").forEach(inp => {
-      inp.addEventListener("input", e => {
-        const card = e.target.closest("[data-idx]");
-        if (!card) return;
-        const idx = Number(card.dataset.idx);
-        const activeDay = scheduleData.find(d => d.id === state.dayId);
-        const target = activeDay?.sessions?.[state.grade]?.[idx];
-        if (!target) return;
-        const field = e.target.dataset.f;
-        target[field] = field === "token" ? e.target.value.toUpperCase() : e.target.value;
-        saveCachedSchedule();
-      });
-    });
-
-    listEl.querySelectorAll("button[data-del-idx]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const idx = Number(btn.dataset.delIdx);
-        const activeDay = scheduleData.find(d => d.id === state.dayId);
-        if (!activeDay?.sessions?.[state.grade]) return;
-        activeDay.sessions[state.grade].splice(idx, 1);
-        saveCachedSchedule();
-        renderSchedule();
-        attachProctorEditListeners();
-        showToast("Item dihapus (klik Simpan ke Server untuk permanen)");
-      });
-    });
-
-    listEl.querySelectorAll("button[data-lock-key]").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const key = btn.dataset.lockKey;
-        btn.disabled = true;
-        setLocalLockState(key, true);
-        renderSchedule();
-        attachProctorEditListeners();
-        try {
-          const res = await postToGas({
-            action: "lockSession",
-            username: state.proctorUser,
-            pin: state.proctorPin,
-            sessionKey: key,
-            reason: "Dikunci manual oleh proktor",
-            studentInfo: `proktor:${state.proctorUser}`
-          });
-          showToast(res.message || "Sesi dikunci di server");
-        } catch {
-          showToast("Sesi dikunci lokal (gagal sinkron server)");
-        }
-      });
-    });
-
-    listEl.querySelectorAll("button[data-unlock-key]").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const key = btn.dataset.unlockKey;
-        btn.disabled = true;
-        setLocalLockState(key, false);
-        renderSchedule();
-        attachProctorEditListeners();
-        try {
-          const res = await postToGas({
-            action: "unlockSession",
-            username: state.proctorUser,
-            pin: state.proctorPin,
-            sessionKey: key
-          });
-          showToast(res.message || "Kunci sesi dibuka di server");
-        } catch {
-          showToast("Kunci lokal dibuka (gagal sinkron server)");
-        }
-      });
-    });
-  }
-
-  async function postToGas(payloadObj) {
-    const res = await fetch(GAS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payloadObj)
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  }
-
-  async function loadScheduleFromServer(silent = false) {
-    try {
-      const res = await fetch(GAS_URL, { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-
-      if (Array.isArray(json.lockedKeys)) {
-        saveLockedSessionsSet(new Set(json.lockedKeys));
-      }
-
-      if (Number.isFinite(Number(json.maxStrikes)) && Number(json.maxStrikes) >= 1 && Number(json.maxStrikes) <= 20) {
-        state.maxStrikes = Number(json.maxStrikes);
-        localStorage.setItem(MAX_STRIKES_KEY, String(state.maxStrikes));
-        document.getElementById("maxStrikesInput").value = state.maxStrikes;
-      }
-
-      if (json.status === "ok" && Array.isArray(json.data) && json.data.length) {
-        scheduleData = json.data;
-        saveCachedSchedule();
-        selectTodayTabIfAvailable();
-        renderDayTabs();
-      } else if (json.status === "empty" && !silent) {
-        showToast("Sheet 'Jadwal' masih kosong, menampilkan jadwal default");
-      } else if (json.status === "error" && !silent) {
-        showToast(json.message || "Gagal memuat dari server");
-      }
-
-      renderSchedule();
-      if (state.isProctor) attachProctorEditListeners();
-      if (!silent && json.status === "ok") showToast("Data & status kunci tersinkron dengan server");
-    } catch {
-      if (!silent) showToast("Gagal terhubung ke server, memakai cache lokal");
-    }
-  }
-
-  function openModal(mode) {
-    state.modalMode = mode;
-    const modal = document.getElementById("proctorModal");
-    const title = document.getElementById("modalTitle");
-    const desc = document.getElementById("modalDesc");
-    const userWrap = document.getElementById("fieldUserWrap");
-    const userInp = document.getElementById("proctorUser");
-    const pinInp = document.getElementById("proctorPin");
-    const errEl = document.getElementById("modalError");
-    const submitBtn = document.getElementById("btnSubmitModal");
-
-    errEl.textContent = "";
-    pinInp.value = "";
-    submitBtn.disabled = false;
-
-    if (mode === "login") {
-      title.textContent = "Login Akun Proktor";
-      desc.textContent = "Masukkan ID Proktor dan PIN dari sheet Config untuk mengelola jadwal & token.";
-      userWrap.hidden = false;
-      userInp.required = true;
-      userInp.value = state.proctorUser || "";
-      submitBtn.textContent = "Masuk";
-    } else {
-      title.textContent = "Ubah PIN Proktor";
-      desc.textContent = "Masukkan PIN baru (4–8 digit angka) untuk disimpan ke sheet Config.";
-      userWrap.hidden = true;
-      userInp.required = false;
-      submitBtn.textContent = "Simpan PIN";
-    }
-
-    modal.hidden = false;
-    setTimeout(() => (mode === "login" ? userInp : pinInp).focus(), 40);
-  }
-
-  function closeModal() {
-    document.getElementById("proctorModal").hidden = true;
-  }
-
-  function setProctorMode(enabled, username = "", pin = "") {
-    state.isProctor = enabled;
-    state.proctorUser = enabled ? username : "";
-    state.proctorPin = enabled ? pin : "";
-    document.getElementById("maxStrikesInput").value = state.maxStrikes;
-    document.getElementById("adminBar").hidden = !enabled;
-    document.getElementById("proctorBadge").textContent = `Proktor: ${username}`;
-    document.getElementById("toggleAdminLink").textContent = enabled ? "Mode Proktor Aktif" : "Login Proktor";
-    renderSchedule();
-    if (enabled) attachProctorEditListeners();
-  }
-
-  function initEvents() {
-    document.getElementById("btnTheme").addEventListener("click", () => {
-      const root = document.documentElement;
-      const cur = root.getAttribute("data-theme");
-      const next = cur === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      showToast(next === "dark" ? "Tema Gelap aktif" : "Tema Terang aktif");
-    });
-
-    document.getElementById("rowGrade").addEventListener("click", e => {
-      const btn = e.target.closest("button[data-g]");
-      if (!btn) return;
-      state.grade = btn.dataset.g;
-      document.querySelectorAll("#rowGrade button[data-g]").forEach(b => {
-        b.classList.toggle("on", b.dataset.g === state.grade);
-      });
-      renderRooms();
-      renderSchedule();
-      if (state.isProctor) attachProctorEditListeners();
-    });
-
-    document.getElementById("rowRoom").addEventListener("click", e => {
-      const btn = e.target.closest("button[data-r]");
-      if (!btn) return;
-      state.room = btn.dataset.r;
-      document.querySelectorAll("#rowRoom button[data-r]").forEach(b => {
-        b.classList.toggle("on", b.dataset.r === state.room);
-      });
-      renderSchedule();
-      if (state.isProctor) attachProctorEditListeners();
-    });
-
-    document.getElementById("dayTabs").addEventListener("click", e => {
-      const btn = e.target.closest("button[data-day]");
-      if (!btn) return;
-      state.dayId = btn.dataset.day;
-      renderDayTabs();
-      renderSchedule();
-      if (state.isProctor) attachProctorEditListeners();
-    });
-
-    document.getElementById("scheduleList").addEventListener("click", async e => {
-      const openBtn = e.target.closest("button[data-open-exam]");
-      if (openBtn) {
-        await startAntiCheatExam(Number(openBtn.dataset.openExam));
-        return;
-      }
-
-      const copyBtn = e.target.closest("button[data-copy-token]");
-      if (!copyBtn) return;
-      const tok = copyBtn.dataset.copyToken;
-      if (!tok) return;
-      try {
-        await navigator.clipboard.writeText(tok);
-      } catch {
-        const tmp = document.createElement("textarea");
-        tmp.value = tok;
-        document.body.appendChild(tmp);
-        tmp.select();
-        document.execCommand("copy");
-        tmp.remove();
-      }
-      showToast(`Token ${tok} disalin!`);
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (state.exam.active && document.hidden) {
-        triggerViolation("Terdeteksi keluar dari aplikasi atau berpindah tab");
-      }
-    });
-
-    window.addEventListener("blur", () => {
-      if (state.exam.active && !document.hidden) {
-        triggerViolation("Jendela ujian kehilangan fokus");
-      }
-    });
-
-    document.addEventListener("fullscreenchange", () => {
-      if (state.exam.active && !document.fullscreenElement) {
-        triggerViolation("Keluar dari mode layar penuh");
-      }
-    });
-
-    document.getElementById("examStage").addEventListener("contextmenu", e => {
-      e.preventDefault();
-    });
-
-    document.getElementById("btnReFullscreen").addEventListener("click", async () => {
-      await requestExamFullscreen();
-      await acquireWakeLock();
-    });
-
-    document.getElementById("btnResumeExam").addEventListener("click", async () => {
-      document.getElementById("examAlertOverlay").hidden = true;
-      await requestExamFullscreen();
-      await acquireWakeLock();
-    });
-
-    document.getElementById("btnExitExam").addEventListener("click", async () => {
-      if (!confirm("Keluar dari mode ujian layar penuh?")) return;
-      await stopAntiCheatExam();
-    });
-
-    document.getElementById("btnCloseLockedExam").addEventListener("click", async () => {
-      await stopAntiCheatExam();
-    });
-
-    document.getElementById("btnUnlockAllView").addEventListener("click", async () => {
-      const activeDay = scheduleData.find(d => d.id === state.dayId) || scheduleData[0];
-      const sessions = activeDay?.sessions?.[state.grade] || [];
-      const keysToUnlock = sessions
-        .map((item, idx) => item.break === undefined ? buildSessionKey(activeDay.id, state.grade, state.room, idx, item) : null)
-        .filter(Boolean);
-
-      const lockedSet = getLockedSessions();
-      let count = 0;
-      keysToUnlock.forEach(k => {
-        if (lockedSet.delete(k)) count += 1;
-      });
-      if (count === 0 && lockedSet.size > 0) {
-        count = lockedSet.size;
-        lockedSet.clear();
-      }
-      saveLockedSessionsSet(lockedSet);
-      renderSchedule();
-      attachProctorEditListeners();
-
-      try {
-        const res = await postToGas({
-          action: "unlockAllSessions",
-          username: state.proctorUser,
-          pin: state.proctorPin,
-          sessionKeys: keysToUnlock
-        });
-        showToast(res.message || `${count} kunci sesi dibuka di server`);
-      } catch {
-        showToast(count > 0 ? `${count} kunci sesi dibuka (lokal)` : "Tidak ada sesi terkunci");
-      }
-    });
-
-    document.getElementById("maxStrikesInput").addEventListener("change", async e => {
-      const val = Math.min(20, Math.max(1, Number(e.target.value) || 6));
-      state.maxStrikes = val;
-      e.target.value = val;
-      localStorage.setItem(MAX_STRIKES_KEY, String(val));
-      renderSchedule();
-      attachProctorEditListeners();
-      try {
-        await postToGas({
-          action: "setMaxStrikes",
-          username: state.proctorUser,
-          pin: state.proctorPin,
-          maxStrikes: val
-        });
-        showToast(`Batas pelanggaran ${val} kali tersimpan di server`);
-      } catch {
-        showToast(`Batas pelanggaran diatur ke ${val} kali (lokal)`);
-      }
-    });
-
-    const toggleLink = document.getElementById("toggleAdminLink");
-    toggleLink.addEventListener("click", () => {
-      if (!state.isProctor) openModal("login");
-    });
-    toggleLink.addEventListener("keydown", e => {
-      if ((e.key === "Enter" || e.key === " ") && !state.isProctor) {
-        e.preventDefault();
-        openModal("login");
-      }
-    });
-
-    document.getElementById("btnCancelModal").addEventListener("click", closeModal);
-    document.getElementById("proctorModal").addEventListener("click", e => {
-      if (e.target.id === "proctorModal") closeModal();
-    });
-
-    document.getElementById("proctorForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const userVal = document.getElementById("proctorUser").value.trim();
-      const pinVal = document.getElementById("proctorPin").value.trim();
-      const errEl = document.getElementById("modalError");
-      const submitBtn = document.getElementById("btnSubmitModal");
-
-      errEl.textContent = "";
-      submitBtn.disabled = true;
-
-      try {
-        if (state.modalMode === "login") {
-          submitBtn.textContent = "Memeriksa...";
-          const res = await postToGas({
-            action: "login",
-            username: userVal,
-            pin: pinVal
-          });
-          if (res.status !== "ok") {
-            errEl.textContent = res.message || "ID Proktor atau PIN salah!";
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Masuk";
-            return;
-          }
-          closeModal();
-          setProctorMode(true, userVal, pinVal);
-          showToast(res.message || "Login berhasil");
-        } else {
-          if (!/^\d{4,8}$/.test(pinVal)) {
-            errEl.textContent = "PIN baru harus berupa 4–8 digit angka.";
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Simpan PIN";
-            return;
-          }
-          submitBtn.textContent = "Menyimpan...";
-          const res = await postToGas({
-            action: "changePin",
-            username: state.proctorUser,
-            pin: state.proctorPin,
-            newPin: pinVal
-          });
-          if (res.status !== "ok") {
-            errEl.textContent = res.message || "Gagal mengubah PIN";
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Simpan PIN";
-            return;
-          }
-          state.proctorPin = pinVal;
-          closeModal();
-          showToast(res.message || "PIN berhasil diubah");
-        }
-      } catch {
-        errEl.textContent = "Gagal menghubungi server Apps Script. Periksa izin akses Web App (Anyone).";
-        submitBtn.disabled = false;
-        submitBtn.textContent = state.modalMode === "login" ? "Masuk" : "Simpan PIN";
-      }
-    });
-
-    document.getElementById("btnAddSession").addEventListener("click", () => {
-      const activeDay = scheduleData.find(d => d.id === state.dayId);
-      if (!activeDay) return;
-      if (!activeDay.sessions[state.grade]) activeDay.sessions[state.grade] = [];
-      activeDay.sessions[state.grade].push({
-        jam: `Jam ke-${activeDay.sessions[state.grade].length + 1}`,
-        time: "12.00 - 13.00",
-        subject: "MAPEL BARU",
-        token: `NEW${state.grade}26`,
-        link: "https://forms.gle/"
-      });
-      saveCachedSchedule();
-      renderSchedule();
-      attachProctorEditListeners();
-      showToast("Sesi ditambahkan (jangan lupa Simpan ke Server)");
-    });
-
-    document.getElementById("btnAddBreak").addEventListener("click", () => {
-      const activeDay = scheduleData.find(d => d.id === state.dayId);
-      if (!activeDay) return;
-      if (!activeDay.sessions[state.grade]) activeDay.sessions[state.grade] = [];
-      activeDay.sessions[state.grade].push({
-        break: "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)"
-      });
-      saveCachedSchedule();
-      renderSchedule();
-      attachProctorEditListeners();
-      showToast("Baris istirahat ditambahkan");
-    });
-
-    document.getElementById("btnSaveServer").addEventListener("click", async e => {
-      const btn = e.currentTarget;
-      btn.disabled = true;
-      btn.textContent = "Menyimpan...";
-      try {
-        const res = await postToGas({
-          action: "saveSchedule",
-          username: state.proctorUser,
-          pin: state.proctorPin,
-          schedule: scheduleData
-        });
-        if (res.status === "ok") {
-          saveCachedSchedule();
-          showToast(res.message || "Jadwal tersimpan ke server");
-        } else {
-          showToast(res.message || "Gagal menyimpan jadwal");
-        }
-      } catch {
-        showToast("Gagal mengirim data ke server");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Simpan ke Server";
-      }
-    });
-
-    document.getElementById("btnRefreshServer").addEventListener("click", () => {
-      loadScheduleFromServer(false);
-    });
-
-    document.getElementById("btnChangePin").addEventListener("click", () => openModal("changePin"));
-
-    document.getElementById("btnResetData").addEventListener("click", () => {
-      if (!confirm("Reset jadwal lokal ke template default? (Belum menimpa server sebelum klik Simpan ke Server)")) return;
-      localStorage.removeItem(CACHE_KEY);
-      scheduleData = buildDefaultSchedule();
-      renderDayTabs();
-      renderSchedule();
-      attachProctorEditListeners();
-      showToast("Jadwal lokal direset ke default");
-    });
-
-    document.getElementById("btnCloseAdmin").addEventListener("click", () => {
-      setProctorMode(false);
-      showToast("Keluar dari mode proktor");
-    });
-  }
-
-  initTicker();
-  selectTodayTabIfAvailable();
-  renderRooms();
-  renderDayTabs();
-  renderSchedule();
-  initEvents();
-  updateClockAndStatus();
-  setInterval(updateClockAndStatus, 1000);
-  loadScheduleFromServer(true);
-  setInterval(() => {
-    if (!state.exam.active && !state.isProctor) {
-      loadScheduleFromServer(true);
-    }
-  }, 12000);
-</script>
-</body>
-</html>
+        { jam: "Jam ke-2", time: "08.30
