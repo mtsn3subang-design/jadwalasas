@@ -1,896 +1,485 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>ASAS Ganjil 2026/2027 · MTsN 3 Subang</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600&display=swap">
-  <style>
-    :root {
-      --bg: #f6f2e6; --card: #fffdf6; --ink: #0d2b21; --mut: #5d6f66; --line: #e3d9b8;
-      --em: #0b5d3f; --gold: #b98a24; --gl: #f0d98a; --tok: #eaf3ec;
-      --ticker-bg: #072b1e; --ticker-border: rgba(240, 217, 138, 0.35);
-      box-sizing: border-box;
-      padding-top: env(safe-area-inset-top, 0px);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --bg: #04170f; --card: #0a2a1e; --ink: #f1ead2; --mut: #9db3a7; --line: #1c4a37; --tok: #06180f; --ticker-bg: #052116;
-      }
-    }
-    :root[data-theme="dark"] {
-      --bg: #04170f; --card: #0a2a1e; --ink: #f1ead2; --mut: #9db3a7; --line: #1c4a37; --tok: #06180f; --ticker-bg: #052116;
-    }
-    html { scroll-padding-top: env(safe-area-inset-top, 0px); }
-    *, *::before, *::after { box-sizing: inherit; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 Poppins, system-ui, sans-serif; transition: background-color 0.25s ease, color 0.25s ease; }
-    :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-
-    header { background: radial-gradient(120% 160% at 50% 0, #0f7a52, #04281d); color: #fff; padding: 22px 16px 26px; border-bottom: 3px solid var(--gold); text-align: center; }
-    .hd { max-width: 880px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .hd svg { height: 64px; width: 64px; flex: none; }
-    .hd-right { display: flex; align-items: center; gap: 10px; flex: none; }
-    .hd small { display: block; letter-spacing: 0.22em; font-size: 10.5px; color: var(--gl); text-transform: uppercase; }
-    .hd h1 { font: 700 clamp(26px, 6.5vw, 44px)/1.1 Lora, Georgia, serif; margin: 4px 0; background: linear-gradient(#fff3c4, #d9ad45 60%, #f0d98a); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hd p { margin: 0; font-size: 12.5px; letter-spacing: 0.08em; color: #e8f1ea; }
-    .theme-toggle { background: rgba(255,255,255,0.12); border: 1px solid rgba(240,217,138,0.45); color: var(--gl); width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; padding: 0; font-size: 18px; flex: none; transition: transform 0.2s ease, background 0.2s ease; }
-    .theme-toggle:hover { background: rgba(255,255,255,0.22); transform: scale(1.05); }
-
-    .ticker { background: var(--ticker-bg); color: #f6f2e6; border-bottom: 1px solid var(--ticker-border); display: flex; align-items: stretch; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    .ticker-badge { background: linear-gradient(135deg, #c79629, #a67818); color: #071e14; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; flex: none; z-index: 2; box-shadow: 4px 0 12px rgba(0,0,0,0.25); }
-    .ticker-track-wrap { position: relative; flex: 1; overflow: hidden; display: flex; align-items: center; padding: 8px 0; }
-    .ticker-track-wrap::before, .ticker-track-wrap::after { content: ""; position: absolute; top: 0; bottom: 0; width: 24px; z-index: 1; pointer-events: none; }
-    .ticker-track-wrap::before { left: 0; background: linear-gradient(to right, var(--ticker-bg), transparent); }
-    .ticker-track-wrap::after { right: 0; background: linear-gradient(to left, var(--ticker-bg), transparent); }
-    .ticker-track { display: inline-flex; white-space: nowrap; will-change: transform; animation: ticker-scroll 42s linear infinite; }
-    .ticker:hover .ticker-track, .ticker:active .ticker-track { animation-play-state: paused; }
-    .ticker-item { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.02em; padding: 0 28px; color: #f4eedc; }
-    .ticker-item .dot { color: var(--gl); font-size: 11px; }
-    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    main { max-width: 880px; margin: auto; padding: 16px; }
-    .pick { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 10px; box-shadow: 0 4px 18px rgba(0,0,0,0.03); }
-    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .row b { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mut); width: 64px; }
-
-    button, .btn { font: 500 14px Poppins, sans-serif; cursor: pointer; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 7px 16px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.18s ease; }
-    button:hover, .btn:hover { border-color: var(--gold); }
-    button.on { background: var(--em); border-color: var(--em); color: #fff; font-weight: 600; }
-
-    .cd { margin: 14px 0; padding: 11px 16px; border-radius: 12px; background: linear-gradient(90deg, #0b5d3f, #0f7a52); color: #fff; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; border: 1px solid rgba(240,217,138,0.3); }
-    .cd strong { color: var(--gl); font-weight: 600; }
-
-    .days { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: thin; }
-    .days button { flex: none; text-align: center; line-height: 1.25; border-radius: 14px; flex-direction: column; padding: 9px 16px; min-width: 105px; }
-    .days button span { display: block; font-size: 11px; opacity: 0.8; }
-    .days button.today { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
-
-    .s { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: grid; grid-template-columns: 115px 1fr; gap: 6px 14px; box-shadow: 0 3px 12px rgba(0,0,0,0.025); }
-    .s.is-hidden-card { opacity: 0.62; border-left-color: #c0392b; }
-    .s .t { font-size: 13px; color: var(--mut); }
-    .s .t b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
-    .s h3 { margin: 0; font: 700 19px Lora, Georgia, serif; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .sub-meta { font-size: 12.5px; color: var(--mut); margin-top: 2px; }
-
-    .live { display: inline-block; background: #c0392b; color: #fff; border-radius: 999px; font: 600 10.5px Poppins, sans-serif; padding: 2px 10px; letter-spacing: 0.05em; animation: pulse 2s infinite; }
-    .badge-done { display: inline-block; background: rgba(93,111,102,0.18); color: var(--mut); border-radius: 999px; font: 600 10.5px Poppins, sans-serif; padding: 2px 10px; }
-    .badge-lock { display: inline-block; background: rgba(185,138,36,0.16); color: var(--gold); border: 1px solid rgba(185,138,36,0.35); border-radius: 999px; font: 600 10.5px Poppins, sans-serif; padding: 2px 10px; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.72; } }
-
-    .act { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--line); }
-    .tok-wrap { display: inline-flex; align-items: center; gap: 6px; }
-    .tok { font: 600 20px ui-monospace, Menlo, monospace; letter-spacing: 0.18em; background: var(--tok); border: 1px dashed var(--gold); border-radius: 10px; padding: 5px 14px; user-select: all; }
-    .tok.locked { color: var(--mut); border-color: var(--line); user-select: none; letter-spacing: 0.22em; }
-    .copy-btn { padding: 6px 12px; font-size: 12.5px; border-radius: 10px; }
-    .go { background: var(--em); color: #fff; border-color: var(--em); font-weight: 500; }
-    .go:hover { background: #094a32; border-color: #094a32; }
-    .btn-locked { background: rgba(93,111,102,0.14); color: var(--mut); border-color: var(--line); cursor: not-allowed; font-size: 13.5px; }
-    .none { color: var(--mut); font-size: 13px; font-style: italic; }
-    .brk { text-align: center; color: var(--mut); font-size: 12.5px; letter-spacing: 0.12em; padding: 6px 0 14px; text-transform: uppercase; }
-
-    .adm { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 16px 0 0; padding: 12px 14px; border: 1px dashed var(--gold); border-radius: 12px; font-size: 13px; background: var(--card); }
-    .adm[hidden], [hidden] { display: none !important; }
-    .ed { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
-    .ed input { font: 14px Poppins, sans-serif; color: var(--ink); background: var(--tok); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; flex: 1 1 240px; min-width: 0; }
-    .ed input[data-f="token"] { flex: 0 1 150px; font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
-    .s.e { grid-template-columns: 1fr; }
-    .s.e .ed input.tm { flex: 0 1 160px; }
-    .s.e .ed input.jm { flex: 0 1 120px; }
-    .dl { color: #c0392b; border-color: #c0392b; font-size: 12.5px; padding: 5px 12px; }
-    .hd-btn { color: var(--gold); border-color: var(--gold); font-size: 12.5px; padding: 5px 12px; }
-
-    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--em); color: #fff; padding: 9px 18px; border-radius: 999px; font-size: 13px; border: 1px solid var(--gl); box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 99; }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(4,23,15,0.72); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 120; }
-    .modal-card { background: var(--card); border: 1px solid var(--gold); border-radius: 18px; padding: 22px; width: 100%; max-width: 380px; box-shadow: 0 16px 40px rgba(0,0,0,0.35); display: grid; gap: 12px; }
-    .modal-card h2 { margin: 0; font: 700 20px Lora, Georgia, serif; color: var(--ink); }
-    .modal-card p { margin: 0; font-size: 13px; color: var(--mut); }
-    .modal-field { display: grid; gap: 5px; }
-    .modal-field label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); }
-    .modal-field input { font: 15px Poppins, sans-serif; color: var(--ink); background: var(--tok); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; width: 100%; }
-    .modal-field input[type="password"] { font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.25em; font-size: 18px; }
-    .modal-err { color: #c0392b; font-size: 12.5px; font-weight: 500; min-height: 18px; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
-
-    .note { color: var(--mut); font-size: 12.5px; text-align: center; margin: 20px 0 8px; }
-    .note a { color: var(--gold); text-decoration: none; cursor: pointer; }
-
-    @media (max-width: 520px) {
-      .s { grid-template-columns: 1fr; }
-      .hd svg { height: 46px; width: 46px; }
-      .hd-right { gap: 6px; }
-      .theme-toggle { width: 34px; height: 34px; font-size: 15px; }
-      .row b { width: 100%; }
-      .ticker-badge { padding: 8px 10px; font-size: 10px; }
-      .ticker-item { font-size: 12px; padding: 0 18px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-track, .live { animation: none; }
-      .ticker-track-wrap { overflow-x: auto; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>ASAS Ganjil 2026/2027 · MTsN 3 Subang</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f6f2e6;--card:#fffdf6;--ink:#0d2b21;--mut:#566860;--line:#e3d9b8;--em:#0b5d3f;--gold:#b98a24;--gl:#f0d98a;--tok:#eaf3ec;--tk:#072b1e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#04170f;--card:#0a2a1e;--ink:#f1ead2;--mut:#a5bbaf;--line:#1c4a37;--tok:#06180f;--tk:#052116}}
+:root[data-theme="dark"]{--bg:#04170f;--card:#0a2a1e;--ink:#f1ead2;--mut:#a5bbaf;--line:#1c4a37;--tok:#06180f;--tk:#052116}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Poppins,system-ui,sans-serif}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+header{background:radial-gradient(120% 160% at 50% 0,#0f7a52,#04281d);color:#fff;padding:22px 16px 26px;border-bottom:3px solid var(--gold);text-align:center}
+.hd{max-width:880px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hd svg{height:64px;width:64px;flex:none}
+.hd-right{display:flex;align-items:center;gap:10px;flex:none}
+.hd small{display:block;letter-spacing:.2em;font-size:10.5px;color:var(--gl);text-transform:uppercase}
+.hd h1{font:700 clamp(26px,6.5vw,44px)/1.1 Lora,Georgia,serif;margin:4px 0;background:linear-gradient(#fff3c4,#d9ad45 60%,#f0d98a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hd p{margin:0;font-size:12.5px;letter-spacing:.08em;color:#e8f1ea}
+.theme-toggle{background:rgba(255,255,255,.12);border:1px solid rgba(240,217,138,.45);color:var(--gl);width:42px;height:42px;border-radius:50%;padding:0;font-size:18px;flex:none}
+.ticker{background:var(--tk);color:#f4eedc;display:flex;overflow:hidden;border-bottom:1px solid rgba(240,217,138,.35)}
+.ticker-badge{background:linear-gradient(135deg,#c79629,#a67818);color:#071e14;font-size:11px;font-weight:700;letter-spacing:.12em;padding:8px 14px;flex:none;z-index:2;display:flex;align-items:center}
+.ticker-wrap{flex:1;overflow:hidden;display:flex;align-items:center;padding:8px 0}
+.ticker-track{display:inline-flex;white-space:nowrap;animation:tk 42s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-item{font-size:13px;padding:0 28px}
+.ticker-item::before{content:"◆ ";color:var(--gl);font-size:11px}
+@keyframes tk{to{transform:translateX(-50%)}}
+main{max-width:880px;margin:auto;padding:16px}
+.pick{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);width:64px}
+button,.btn{font:500 14px Poppins,sans-serif;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:7px 16px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button:hover,.btn:hover{border-color:var(--gold)}
+button[aria-pressed="true"]{background:var(--em);border-color:var(--em);color:#fff;font-weight:600}
+.cd{margin:14px 0 6px;padding:11px 16px;border-radius:12px;background:linear-gradient(90deg,#0b5d3f,#0f7a52);color:#fff;font-size:13.5px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cd strong{color:var(--gl);font-weight:600}
+.err{margin:0 0 8px;padding:8px 14px;border-radius:10px;background:rgba(192,57,43,.14);border:1px solid #c0392b;color:var(--ink);font-size:13px}
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px}
+.days button{flex:none;flex-direction:column;border-radius:14px;padding:9px 16px;min-width:105px;line-height:1.25}
+.days button span{font-size:11px;opacity:.85}
+.days button.today{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.s{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:grid;grid-template-columns:115px 1fr;gap:6px 14px}
+.s.is-hidden-card{opacity:.65;border-left-color:#c0392b}
+.s .t{font-size:13px;color:var(--mut)}
+.s .t b{display:block;color:var(--ink);font-size:15px}
+.s h3{margin:0;font:700 19px Lora,Georgia,serif;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.sub-meta{font-size:12.5px;color:var(--mut)}
+.live,.badge-done,.badge-lock{display:inline-block;border-radius:999px;font:600 10.5px Poppins,sans-serif;padding:2px 10px}
+.live{background:#c0392b;color:#fff}
+.badge-done{background:rgba(93,111,102,.18);color:var(--mut)}
+.badge-lock{background:rgba(185,138,36,.16);color:var(--gold);border:1px solid rgba(185,138,36,.35)}
+.act{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.tok{font:600 20px ui-monospace,Menlo,monospace;letter-spacing:.18em;background:var(--tok);border:1px dashed var(--gold);border-radius:10px;padding:5px 14px;user-select:all}
+.tok.locked{color:var(--mut);border-color:var(--line);user-select:none}
+.copy-btn{padding:6px 12px;font-size:12.5px;border-radius:10px}
+.go{background:var(--em);color:#fff;border-color:var(--em)}
+.btn-locked{background:rgba(93,111,102,.14);color:var(--mut);cursor:not-allowed}
+.none{color:var(--mut);font-size:13px;font-style:italic}
+.brk{text-align:center;color:var(--mut);font-size:12.5px;letter-spacing:.12em;padding:6px 0 14px;text-transform:uppercase}
+.adm{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px;padding:12px 14px;border:1px dashed var(--gold);border-radius:12px;font-size:13px;background:var(--card)}
+[hidden]{display:none!important}
+.ed{display:flex;flex-wrap:wrap;gap:8px;width:100%}
+.ed input{font:14px Poppins,sans-serif;color:var(--ink);background:var(--tok);border:1px solid var(--line);border-radius:10px;padding:8px 12px;flex:1 1 240px;min-width:0}
+.ed input.tm{flex:0 1 160px}.ed input.jm{flex:0 1 120px}
+.ed input[data-f="token"]{flex:0 1 150px;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}
+.s.e{grid-template-columns:1fr}
+.dl{color:#c0392b;border-color:#c0392b;font-size:12.5px;padding:5px 12px}
+.hd-btn{color:var(--gold);border-color:var(--gold);font-size:12.5px;padding:5px 12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--em);color:#fff;padding:9px 18px;border-radius:999px;font-size:13px;border:1px solid var(--gl);opacity:0;pointer-events:none;transition:opacity .2s;z-index:99}
+.toast.show{opacity:1}
+.modal-backdrop{position:fixed;inset:0;background:rgba(4,23,15,.72);display:flex;align-items:center;justify-content:center;padding:16px;z-index:120}
+.modal-card{background:var(--card);border:1px solid var(--gold);border-radius:18px;padding:22px;width:100%;max-width:380px;display:grid;gap:12px}
+.modal-card h2{margin:0;font:700 20px Lora,Georgia,serif}
+.modal-card p{margin:0;font-size:13px;color:var(--mut)}
+.modal-field{display:grid;gap:5px}
+.modal-field label{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.modal-field input{font:15px Poppins,sans-serif;color:var(--ink);background:var(--tok);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%}
+.modal-err{color:#c0392b;font-size:12.5px;min-height:18px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.note{color:var(--mut);font-size:12.5px;text-align:center;margin:20px 0 8px}
+.note a{color:var(--gold);cursor:pointer}
+@media(max-width:520px){.s{grid-template-columns:1fr}.hd svg{height:46px;width:46px}.theme-toggle{width:34px;height:34px;font-size:15px}.row b{width:100%}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}.ticker-wrap{overflow-x:auto}}
+</style>
 </head>
 <body>
-
 <header>
-  <div class="hd">
-    <svg viewBox="0 0 200 200" aria-label="Logo MTs Negeri 3 Subang">
-      <defs>
-        <path id="archTextPath" d="M 33,108 A 67,67 0 1,1 167,108" />
-        <path id="ribbonTextPath" d="M 48,153 Q 100,174 152,153" />
-      </defs>
-      <polygon points="100,10 190,74 156,184 44,184 10,74" fill="#0d7c38" stroke="#08140d" stroke-width="5" stroke-linejoin="round"/>
-      <text fill="#ffffff" font-family="Poppins, Arial, sans-serif" font-size="10.2" font-weight="700" letter-spacing="0.4">
-        <textPath href="#archTextPath" startOffset="50%" text-anchor="middle">MADRASAH TSANAWIYAH NEGERI 3 SUBANG</textPath>
-      </text>
-      <path d="M 76,55 A 45,45 0 1,0 124,55 A 36,36 0 1,1 76,55 Z" fill="#f7e81c" stroke="#08140d" stroke-width="2.5" stroke-linejoin="round"/>
-      <g transform="translate(0, 2)">
-        <path d="M 75,54 L 100,56 L 125,54 L 125,84 L 100,87 L 75,84 Z" fill="#08140d"/>
-        <path d="M 78,51 Q 89,49 99,54 L 99,81 Q 89,77 78,80 Z" fill="#f7e81c"/>
-        <path d="M 122,51 Q 111,49 101,54 L 101,81 Q 111,77 122,80 Z" fill="#f7e81c"/>
-        <rect x="81" y="55" width="7" height="12" fill="#08140d"/>
-        <g stroke="#08140d" stroke-width="1.8" stroke-linecap="round">
-          <line x1="91" y1="56" x2="96" y2="57"/><line x1="91" y1="60" x2="96" y2="61"/><line x1="91" y1="64" x2="96" y2="65"/>
-          <line x1="81" y1="70" x2="96" y2="71"/><line x1="81" y1="74" x2="96" y2="75"/>
-          <line x1="104" y1="57" x2="119" y2="55"/><line x1="104" y1="61" x2="119" y2="59"/>
-          <line x1="104" y1="65" x2="119" y2="63"/><line x1="104" y1="69" x2="119" y2="67"/><line x1="104" y1="73" x2="119" y2="71"/>
-        </g>
-      </g>
-      <text x="100" y="106" text-anchor="middle" fill="#ffffff" stroke="#08140d" stroke-width="1.2" paint-order="stroke" font-family="Poppins, Arial, sans-serif" font-size="18" font-weight="700">MTsN</text>
-      <text x="100" y="146" text-anchor="middle" fill="#ffffff" stroke="#08140d" stroke-width="1.2" paint-order="stroke" font-family="Poppins, Arial, sans-serif" font-size="18.5" font-weight="700">63</text>
-      <path d="M 46,138 L 32,144 L 38,151 L 31,158 L 52,155 L 52,143 Z" fill="#ffffff" stroke="#08140d" stroke-width="2.2" stroke-linejoin="round"/>
-      <path d="M 154,138 L 168,144 L 162,151 L 169,158 L 148,155 L 148,143 Z" fill="#ffffff" stroke="#08140d" stroke-width="2.2" stroke-linejoin="round"/>
-      <path d="M 46,138 Q 100,162 154,138 L 154,156 Q 100,180 46,156 Z" fill="#ffffff" stroke="#08140d" stroke-width="2.5" stroke-linejoin="round"/>
-      <text fill="#08140d" font-family="Poppins, Arial, sans-serif" font-size="9.5" font-weight="700" letter-spacing="0.4">
-        <textPath href="#ribbonTextPath" startOffset="50%" text-anchor="middle">KABUPATEN SUBANG</textPath>
-      </text>
-    </svg>
-
-    <div>
-      <small>Kementerian Agama RI · Kab. Subang</small>
-      <h1>ASAS Ganjil 2026/2027</h1>
-      <p>MTs NEGERI 3 SUBANG · PORTAL UJIAN BERBASIS DIGITAL</p>
-    </div>
-
-    <div class="hd-right">
-      <svg viewBox="0 0 200 200" aria-label="Logo ASAS 26 MTsN 3 Subang">
-        <defs>
-          <path id="asasTopArc" d="M 42,84 A 62,62 0 0,1 142,46" />
-          <path id="asasBotArc" d="M 46,146 Q 100,180 154,146" />
-          <linearGradient id="shieldBg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#174c6e"/>
-            <stop offset="100%" stop-color="#071e30"/>
-          </linearGradient>
-        </defs>
-        <path d="M 100,8 L 180,36 L 176,112 C 172,154 138,180 100,192 C 62,180 28,154 24,112 L 20,36 Z" fill="url(#shieldBg)" stroke="#d9e4ec" stroke-width="5" stroke-linejoin="round"/>
-        <path d="M 100,15 L 172,41 L 168,110 C 165,148 134,172 100,184 C 66,172 35,148 32,110 L 28,41 Z" fill="none" stroke="#39789e" stroke-width="2"/>
-        <circle cx="100" cy="104" r="46" fill="#e67e22" stroke="#071e30" stroke-width="2"/>
-        <circle cx="100" cy="104" r="34" fill="#103954"/>
-        <text fill="#ffffff" stroke="#071e30" stroke-width="3" paint-order="stroke" font-family="Poppins, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="1">
-          <textPath href="#asasTopArc" startOffset="50%" text-anchor="middle">ASAS 26</textPath>
-        </text>
-        <rect x="73" y="54" width="54" height="86" rx="8" fill="#3b5266" stroke="#f39c12" stroke-width="2.5"/>
-        <rect x="78" y="61" width="44" height="72" rx="4" fill="#ffffff"/>
-        <rect x="78" y="61" width="44" height="6" fill="#4cd137"/>
-        <text x="100" y="77" text-anchor="middle" fill="#1e272e" font-family="Poppins, Arial, sans-serif" font-size="9.5" font-weight="700">EXAM...</text>
-        <rect x="83" y="80" width="34" height="5" rx="2.5" fill="#dcdde1" stroke="#2f3640" stroke-width="0.8"/>
-        <rect x="83.5" y="80.5" width="20" height="4" rx="2" fill="#44bd32"/>
-        <circle cx="92" cy="94" r="3" fill="#1e272e"/><circle cx="93" cy="93" r="1" fill="#ffffff"/>
-        <circle cx="108" cy="94" r="3" fill="#1e272e"/><circle cx="109" cy="93" r="1" fill="#ffffff"/>
-        <ellipse cx="86" cy="98" rx="2.5" ry="1.5" fill="#ff7979"/>
-        <ellipse cx="114" cy="98" rx="2.5" ry="1.5" fill="#ff7979"/>
-        <path d="M 93,99 Q 100,108 107,99 Z" fill="#1e272e"/>
-        <path d="M 96,103 Q 100,106 104,103 Z" fill="#eb4d4b"/>
-        <rect x="83" y="110" width="6" height="6" fill="none" stroke="#2f3640" stroke-width="1.2"/>
-        <polyline points="84,113 86,115 90,110" fill="none" stroke="#44bd32" stroke-width="1.5"/>
-        <line x1="92" y1="113" x2="114" y2="113" stroke="#7f8fa6" stroke-width="2"/>
-        <rect x="83" y="120" width="6" height="6" fill="none" stroke="#2f3640" stroke-width="1.2"/>
-        <polyline points="84,123 86,125 90,120" fill="none" stroke="#44bd32" stroke-width="1.5"/>
-        <line x1="92" y1="123" x2="114" y2="123" stroke="#7f8fa6" stroke-width="2"/>
-        <path d="M 73,98 Q 62,106 69,116" fill="none" stroke="#273c75" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="71" cy="117" r="4.5" fill="#ffffff" stroke="#1e272e" stroke-width="1.5"/>
-        <path d="M 127,98 Q 138,106 131,114" fill="none" stroke="#273c75" stroke-width="5" stroke-linecap="round"/>
-        <line x1="135" y1="96" x2="110" y2="123" stroke="#576574" stroke-width="4.5" stroke-linecap="round"/>
-        <polygon points="110,123 106,127 112,125" fill="#ffffff" stroke="#1e272e" stroke-width="1"/>
-        <circle cx="136" cy="64" r="18" fill="#44bd32" stroke="#ffffff" stroke-width="2.5"/>
-        <polyline points="127,64 133,70 145,57" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M 62,132 L 138,132 L 130,148 L 70,148 Z" fill="#0d4233" stroke="#ffffff" stroke-width="1.8"/>
-        <text x="100" y="144" text-anchor="middle" fill="#4cd137" font-family="Poppins, Arial, sans-serif" font-size="11.5" font-weight="700">SMT G1</text>
-        <path d="M 38,140 Q 100,174 162,140 L 154,158 Q 100,190 46,158 Z" fill="#071e30" stroke="#e67e22" stroke-width="2.2"/>
-        <text fill="#ffffff" font-family="Poppins, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.5">
-          <textPath href="#asasBotArc" startOffset="50%" text-anchor="middle">MTsN 3 SUBANG</textPath>
-        </text>
-      </svg>
-
-      <button type="button" class="theme-toggle" id="btnTheme" title="Ubah Tema Tampilan" aria-label="Ubah Tema">◐</button>
-    </div>
-  </div>
+<div class="hd">
+<!-- LOGO KIRI: tempel blok <svg ...>...</svg> logo MTsN 3 dari file lama di sini -->
+<div>
+<small>Kementerian Agama RI · Kab. Subang</small>
+<h1>ASAS Ganjil 2026/2027</h1>
+<p>MTs NEGERI 3 SUBANG · PORTAL UJIAN BERBASIS DIGITAL</p>
+</div>
+<div class="hd-right">
+<!-- LOGO KANAN: tempel blok <svg ...>...</svg> logo ASAS 26 dari file lama di sini -->
+<button type="button" class="theme-toggle" id="btnTheme" aria-pressed="false" aria-label="Aktifkan tema gelap" title="Ubah tema">◐</button>
+</div>
+</div>
 </header>
 
-<div class="ticker" role="region" aria-label="Motivasi dan Pengumuman ASAS">
-  <div class="ticker-badge">✦ MOTIVASI ASAS</div>
-  <div class="ticker-track-wrap">
-    <div class="ticker-track" id="tickerTrack"></div>
-  </div>
+<div class="ticker" role="region" aria-label="Motivasi ASAS">
+<div class="ticker-badge">✦ MOTIVASI ASAS</div>
+<div class="ticker-wrap"><div class="ticker-track" id="tickerTrack"></div></div>
 </div>
 
 <main>
-  <section class="pick" aria-label="Filter Kelas">
-    <div class="row" id="rowGrade">
-      <b>Tingkat</b>
-      <button type="button" data-g="7" class="on">Kelas VII</button>
-      <button type="button" data-g="8">Kelas VIII</button>
-      <button type="button" data-g="9">Kelas IX</button>
-    </div>
-    <div class="row" id="rowRoom">
-      <b>Rombel</b>
-    </div>
-  </section>
+<section class="pick" aria-label="Filter Kelas">
+<div class="row" id="rowGrade"><b>Tingkat</b>
+<button type="button" data-g="7" aria-pressed="true">Kelas VII</button>
+<button type="button" data-g="8" aria-pressed="false">Kelas VIII</button>
+<button type="button" data-g="9" aria-pressed="false">Kelas IX</button>
+</div>
+<div class="row" id="rowRoom"><b>Rombel</b></div>
+</section>
 
-  <div class="cd" id="statusBanner">
-    <span id="statusText">Memuat jadwal ujian...</span>
-    <strong id="clockDisplay">--:--:-- WIB</strong>
-  </div>
+<div class="cd"><span id="statusText">Memuat jadwal ujian...</span><strong id="clockDisplay">--:--:-- WIB</strong></div>
+<div class="err" id="loadErr" role="alert" hidden>Gagal memuat data dari server. Mencoba lagi otomatis… Jika berlanjut, hubungi proktor.</div>
+<nav class="days" id="dayTabs" aria-label="Pilih Hari Ujian"></nav>
+<section id="scheduleList" aria-live="polite"></section>
 
-  <nav class="days" id="dayTabs" aria-label="Pilih Hari Ujian"></nav>
+<div class="adm" id="adminBar" hidden>
+<strong id="proctorBadge">Proktor</strong>
+<button type="button" id="btnAddSession">+ Tambah Sesi</button>
+<button type="button" id="btnChangePin">Ubah PIN</button>
+<button type="button" id="btnResetData" class="dl">Reset Jadwal Default</button>
+<button type="button" id="btnCloseAdmin">Keluar Proktor</button>
+</div>
 
-  <section id="scheduleList" aria-live="polite"></section>
-
-  <div class="adm" id="adminBar" hidden>
-    <strong id="proctorBadge">Proktor: proktor</strong>
-    <button type="button" id="btnAddSession">+ Tambah Sesi</button>
-    <button type="button" id="btnChangePin">Ubah PIN</button>
-    <button type="button" id="btnResetData" class="dl">Reset Jadwal Default</button>
-    <button type="button" id="btnCloseAdmin">Keluar Proktor</button>
-  </div>
-
-  <p class="note">
-    Token dan tautan soal terbuka otomatis 5 menit sebelum jam ujian dimulai.
-    · <a id="toggleAdminLink" role="button" tabindex="0">Login Proktor</a>
-  </p>
+<p class="note">Token dan tautan soal terbuka otomatis 5 menit sebelum jam ujian dimulai. · <a id="toggleAdminLink" role="button" tabindex="0">Login Proktor</a></p>
 </main>
 
 <div class="modal-backdrop" id="proctorModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <form class="modal-card" id="proctorForm">
-    <h2 id="modalTitle">Login Akun Proktor</h2>
-    <p id="modalDesc">Masukkan ID Proktor dan PIN keamanan untuk mengelola jadwal, token, serta tautan soal.</p>
-    <div class="modal-field" id="fieldUserWrap">
-      <label for="proctorUser">ID Akun Proktor</label>
-      <input type="text" id="proctorUser" autocomplete="username" placeholder="proktor" required>
-    </div>
-    <div class="modal-field">
-      <label for="proctorPin" id="labelPin">PIN Proktor (4–8 Digit)</label>
-      <input type="password" id="proctorPin" inputmode="numeric" maxlength="8" placeholder="••••••" required>
-    </div>
-    <div class="modal-err" id="modalError"></div>
-    <div class="modal-actions">
-      <button type="button" id="btnCancelModal">Batal</button>
-      <button type="submit" class="go" id="btnSubmitModal">Masuk</button>
-    </div>
-  </form>
+<form class="modal-card" id="proctorForm">
+<h2 id="modalTitle">Login Akun Proktor</h2>
+<p id="modalDesc"></p>
+<div class="modal-field" id="fieldUserWrap"><label for="proctorUser">ID Akun Proktor</label>
+<input type="text" id="proctorUser" autocomplete="username" required></div>
+<div class="modal-field"><label for="proctorPin" id="labelPin">PIN Proktor</label>
+<input type="password" id="proctorPin" inputmode="numeric" maxlength="8" autocomplete="current-password" required></div>
+<div class="modal-err" id="modalError" aria-live="polite"></div>
+<div class="modal-actions"><button type="button" id="btnCancelModal">Batal</button><button type="submit" class="go" id="btnSubmitModal">Masuk</button></div>
+</form>
 </div>
-
-<div class="toast" id="toast">Token disalin ke papan klip!</div>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbxTdkbIgXe_mhSuLfNrb-4nfV5qPzhxq0zfYpBhH3N4EjrBWLKcbiPZihTo1xHW8CaY/exec";
-  const EARLY_UNLOCK_MINUTES = 5;
-  const STORAGE_KEY = "asas_mtsn3subang_2026_v3";
-  const THEME_KEY = "asas_mtsn3subang_theme_v1";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxTdkbIgXe_mhSuLfNrb-4nfV5qPzhxq0zfYpBhH3N4EjrBWLKcbiPZihTo1xHW8CaY/exec";
+const EARLY = 5 * 60;
+const THEME_KEY = "asas_mtsn3subang_theme_v1";
+const QUOTES = [
+  "Awali setiap soal dengan Bismillah, kerjakan dengan tenang, teliti, dan penuh rasa percaya diri.",
+  "Kejujuran adalah mahkota pelajar madrasah — nilai tinggi yang diraih dengan usaha sendiri jauh lebih bermakna.",
+  "Pelajar hebat tidak menyerah pada soal yang sulit; ia membaca ulang dengan cermat lalu memberikan yang terbaik.",
+  "Doa orang tua dan bimbingan guru mengiringi langkahmu — buktikan hasil belajar semester ganjil ini dengan gemilang!",
+  "Periksa kembali seluruh jawaban sebelum klik Kirim, dan pastikan layar konfirmasi muncul sempurna."
+];
+const ROOMS = { "7": "ABCDEFGHI", "8": "ABCDEFGH", "9": "ABCDEFG" };
 
-  const MOTIVATION_QUOTES = [
-    "Awali setiap soal dengan Bismillah, kerjakan dengan tenang, teliti, dan penuh rasa percaya diri.",
-    "Kejujuran adalah mahkota pelajar madrasah — nilai tinggi yang diraih dengan usaha sendiri jauh lebih bermakna.",
-    "Pelajar hebat tidak menyerah pada soal yang sulit; ia membaca ulang dengan cermat lalu memberikan yang terbaik.",
-    "Doa orang tua dan bimbingan guru mengiringi langkahmu — buktikan hasil belajar semester ganjil ini dengan gemilang!",
-    "Periksa kembali seluruh jawaban sebelum klik Kirim, dan pastikan layar konfirmasi muncul sempurna."
+function defaultSchedule() {
+  const days = [
+    ["Senin","2026-11-30","30 Nov 2026",["MATEMATIKA","B. INDONESIA","AL-QURAN HADITS"]],
+    ["Selasa","2026-12-01","01 Des 2026",["B. INGGRIS","AKIDAH AKHLAK","FIKIH"]],
+    ["Rabu","2026-12-02","02 Des 2026",["IPA","BAHASA ARAB","BAHASA SUNDA"]],
+    ["Kamis","2026-12-03","03 Des 2026",["PPKn","IPS","SKI"]],
+    ["Jum'at","2026-12-04","04 Des 2026",["INFORMATIKA","SENI BUDAYA","PENJASORKES"]]
   ];
-
-  /* Kerangka jadwal. TOKEN & TAUTAN SENGAJA KOSONG di kode ini agar tidak bisa dibaca siswa
-     lewat "Lihat Sumber". Isi token/tautan hanya lewat Mode Proktor (tersimpan di Google Sheets). */
-  const ROOMS_BY_GRADE = {
-    "7": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
-    "8": ["A", "B", "C", "D", "E", "F", "G", "H"],
-    "9": ["A", "B", "C", "D", "E", "F", "G"]
-  };
-
-  function buildDefaultSchedule() {
-    const days = [
-      ["Senin", "2026-11-30", "30 Nov 2026", ["MATEMATIKA", "B. INDONESIA", "AL-QURAN HADITS"]],
-      ["Selasa", "2026-12-01", "01 Des 2026", ["B. INGGRIS", "AKIDAH AKHLAK", "FIKIH"]],
-      ["Rabu", "2026-12-02", "02 Des 2026", ["IPA", "BAHASA ARAB", "BAHASA SUNDA"]],
-      ["Kamis", "2026-12-03", "03 Des 2026", ["PPKn", "IPS", "SKI"]],
-      ["Jum'at", "2026-12-04", "04 Des 2026", ["INFORMATIKA", "SENI BUDAYA", "PENJASORKES"]]
-    ];
-    return days.map((d, i) => {
-      const friday = i === 4;
-      const sessions = {};
-      ["7", "8", "9"].forEach(g => {
-        const mk = (jam, time, subject) => ({ jam, time, subject, token: "", link: "", hidden: false });
-        sessions[g] = [
-          mk("Jam ke-1", "07.00 - 08.30", d[3][0]),
-          mk("Jam ke-2", "08.30 - 10.00", d[3][1]),
-          { break: friday ? "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" : "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
-          mk("Jam ke-4", friday ? "10.10 - 11.20" : "10.30 - 12.00", d[3][2])
-        ];
-      });
-      return { id: "d" + (i + 1), day: d[0], date: d[1], labelDate: d[2], sessions };
+  return days.map((d, i) => {
+    const fri = i === 4, sessions = {};
+    ["7","8","9"].forEach(g => {
+      const mk = (jam, time, subject) => ({ jam, time, subject, token: "", link: "", hidden: false });
+      sessions[g] = [
+        mk("Jam ke-1", "07.00 - 08.30", d[3][0]),
+        mk("Jam ke-2", "08.30 - 10.00", d[3][1]),
+        { break: fri ? "Jam ke-3 · ISTIRAHAT (10.00 - 10.10)" : "Jam ke-3 · ISTIRAHAT (10.00 - 10.30)" },
+        mk("Jam ke-4", fri ? "10.10 - 11.20" : "10.30 - 12.00", d[3][2])
+      ];
     });
+    return { id: "d" + (i + 1), day: d[0], date: d[1], labelDate: d[2], sessions };
+  });
+}
+
+let session = { username: "", pin: "" };
+let serverOffset = 0; // selisih waktu server terhadap perangkat (ms)
+const state = { grade: "7", room: "A", dayIndex: 0, adminMode: false, modalMode: "login", schedule: defaultSchedule() };
+
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+const $ = id => document.getElementById(id);
+const esc = (s = "") => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const setHtml = (el, h) => { if (el._h !== h) { el._h = h; el.innerHTML = h; } };
+
+function showToast(msg) {
+  const el = $("toast"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(showToast._t); showToast._t = setTimeout(() => el.classList.remove("show"), 2200);
+}
+function setLoadError(on) { $("loadErr").hidden = !on; }
+
+/* ---- Jaringan: semua lewat POST agar PIN tidak masuk URL/log ---- */
+async function api(body) {
+  const res = await fetch(GAS_URL, { method: "POST", cache: "no-store", body: JSON.stringify(body) });
+  return res.json();
+}
+
+async function fetchCloudSchedule() {
+  try {
+    const body = { action: "getSchedule" };
+    if (state.adminMode) { body.username = session.username; body.pin = session.pin; }
+    const json = await api(body);
+    if (json.now) serverOffset = json.now - Date.now();
+    if (json.status === "ok" && Array.isArray(json.data) && json.data.length) {
+      state.schedule = json.data;
+      if (state.dayIndex >= json.data.length) state.dayIndex = 0;
+      setLoadError(false); renderDays(); updateClockAndStatus();
+    } else if (json.status === "empty") {
+      setLoadError(false);
+      if (state.adminMode) await saveSchedule();
+    } else setLoadError(true);
+  } catch (err) { setLoadError(true); }
+}
+
+async function saveSchedule() {
+  if (!session.pin) return;
+  showToast("Menyimpan ke Google Sheets...");
+  try {
+    const json = await api({ action: "saveSchedule", username: session.username, pin: session.pin, schedule: state.schedule });
+    showToast(json.status === "ok" ? "Tersinkronisasi ke Google Sheets!" : "Gagal sinkron: " + (json.message || "Error"));
+  } catch (err) { showToast("Gagal menyimpan — cek koneksi internet"); }
+}
+
+/* ---- Waktu (memakai jam server) ---- */
+function getWibNow() {
+  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).formatToParts(new Date(Date.now() + serverOffset));
+  const m = Object.fromEntries(parts.map(p => [p.type, p.value]));
+  const hh = m.hour === "24" ? "00" : m.hour;
+  return { dateStr: `${m.year}-${m.month}-${m.day}`, seconds: +hh * 3600 + +m.minute * 60 + +m.second, clockStr: `${hh}:${m.minute}:${m.second} WIB` };
+}
+function parseRange(s = "") {
+  const m = s.match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
+  return m ? { start: +m[1] * 3600 + +m[2] * 60, end: +m[3] * 3600 + +m[4] * 60 } : null;
+}
+function statusOf(date, time, wib) {
+  if (!date) return "upcoming";
+  if (wib.dateStr > date) return "done";
+  if (wib.dateStr < date) return "upcoming";
+  const r = parseRange(time); if (!r) return "upcoming";
+  if (wib.seconds >= r.start - EARLY && wib.seconds <= r.end) return "live";
+  return wib.seconds > r.end ? "done" : "upcoming";
+}
+
+/* ---- Render ---- */
+function renderTicker() {
+  const one = QUOTES.map(q => `<span class="ticker-item">${esc(q)}</span>`).join("");
+  $("tickerTrack").innerHTML = one + `<span aria-hidden="true">${one}</span>`;
+}
+function renderRooms() {
+  const rooms = ROOMS[state.grade].split("");
+  if (!rooms.includes(state.room)) state.room = rooms[0];
+  $("rowRoom").innerHTML = "<b>Rombel</b>" + rooms.map(r => `<button type="button" data-r="${r}" aria-pressed="${state.room === r}">${state.grade}${r}</button>`).join("");
+}
+function renderDays(wib = getWibNow()) {
+  $("dayTabs").innerHTML = state.schedule.map((d, i) =>
+    `<button type="button" data-d="${i}" aria-pressed="${i === state.dayIndex}" class="${d.date === wib.dateStr ? "today" : ""}">${esc(d.day)}<span>${esc(d.labelDate || d.date)}</span></button>`).join("");
+}
+
+let fetchSig = "";
+function renderSchedule(wib = getWibNow()) {
+  const box = $("scheduleList");
+  if (state.adminMode && document.activeElement && document.activeElement.closest(".s.e")) return; // jangan hapus isian yang sedang diketik
+  const day = state.schedule[state.dayIndex];
+  if (!day) return setHtml(box, `<p class="none">Jadwal belum tersedia.</p>`);
+  const raw = (day.sessions && day.sessions[state.grade]) || [];
+  const list = state.adminMode ? raw : raw.filter(x => !x.hidden);
+  if (!list.length) return setHtml(box, `<p class="none">Belum ada sesi ujian untuk Kelas ${esc(state.grade)}${esc(state.room)} pada hari ${esc(day.day)}.</p>`);
+
+  if (!state.adminMode) {
+    const need = list.some(x => !x.break && statusOf(day.date, x.time, wib) === "live" && !x.token);
+    const sig = `${day.date}_${state.grade}_${need}_${Math.floor(wib.seconds / 20)}`;
+    if (need && sig !== fetchSig) { fetchSig = sig; fetchCloudSchedule(); }
   }
 
-  let proctorSession = { username: "", pin: "" };
-  let state = {
-    grade: "7",
-    room: "A",
-    dayIndex: 0,
-    adminMode: false,
-    modalMode: "login",
-    schedule: buildDefaultSchedule() // siswa tidak pernah membaca cache lokal
-  };
+  setHtml(box, list.map((it, idx) => {
+    if (it.break) return `<div class="brk">${esc(it.break)}</div>`;
+    if (state.adminMode) return `
+<div class="s e ${it.hidden ? "is-hidden-card" : ""}" data-idx="${idx}"><div class="ed">
+<input class="jm" data-f="jam" value="${esc(it.jam)}" aria-label="Jam ke">
+<input class="tm" data-f="time" value="${esc(it.time)}" aria-label="Waktu">
+<input data-f="subject" value="${esc(it.subject)}" aria-label="Mata pelajaran">
+<input data-f="token" value="${esc(it.token)}" placeholder="TOKEN" aria-label="Token">
+<input data-f="link" value="${esc(it.link)}" placeholder="https://..." aria-label="Tautan soal"></div>
+<div class="act"><button type="button" class="go btn-save">Simpan Semua Perubahan</button>
+<button type="button" class="hd-btn btn-hide">${it.hidden ? "👁️ Tampilkan ke Siswa" : "🙈 Sembunyikan dari Siswa"}</button>
+<button type="button" class="dl btn-del">Hapus</button></div></div>`;
 
-  /* Akses penyimpanan lokal yang aman (bisa error di mode privat) */
-  const store = {
-    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
-    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
-  };
+    const st = statusOf(day.date, it.time, wib);
+    const open = st === "live" && !!it.token;
+    const badge = st === "live" ? `<span class="live">SEDANG BERLANGSUNG</span>` : st === "done" ? `<span class="badge-done">SELESAI</span>` : `<span class="badge-lock">🔒 TERKUNCI</span>`;
+    const link = /^https?:\/\//i.test(it.link || "") ? it.link : "#";
+    return `
+<article class="s"><div class="t"><b>${esc(it.jam)}</b>${esc(it.time)}</div>
+<div><h3>${esc(it.subject)} ${badge}</h3><div class="sub-meta">Kelas ${esc(state.grade)}${esc(state.room)} · ${esc(day.day)}, ${esc(day.labelDate || day.date)}</div></div>
+<div class="act">${open
+  ? `<span class="tok">${esc(it.token)}</span><button type="button" class="copy-btn" data-token="${esc(it.token)}">Salin Token</button><a class="btn go" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Buka Soal</a>`
+  : `<span class="tok locked">••••••</span><button type="button" class="btn-locked" disabled>${st === "done" ? "Waktu Ujian Berakhir" : "Menunggu Jam Ujian"}</button>`}</div></article>`;
+  }).join(""));
+}
 
-  function escapeAttr(str = "") {
-    return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function updateClockAndStatus() {
+  const wib = getWibNow();
+  $("clockDisplay").textContent = wib.clockStr;
+  const first = state.schedule[0], last = state.schedule[state.schedule.length - 1];
+  let h;
+  if (first && wib.dateStr < first.date) h = `Pelaksanaan ASAS Ganjil dimulai <strong>${esc(first.day)}, ${esc(first.labelDate)}</strong> pukul <strong>07.00 WIB</strong>.`;
+  else if (last && wib.dateStr > last.date) h = `Rangkaian jadwal ASAS Ganjil (<strong>${esc(first.labelDate)} – ${esc(last.labelDate)}</strong>) telah selesai.`;
+  else {
+    const day = state.schedule.find(d => d.date === wib.dateStr) || state.schedule[state.dayIndex];
+    const live = ((day && day.sessions && day.sessions[state.grade]) || []).filter(x => !x.break && !x.hidden).find(x => statusOf(day.date, x.time, wib) === "live");
+    h = live ? `Sesi aktif Kelas <strong>${esc(state.grade)}${esc(state.room)}</strong>: <strong>${esc(live.subject)}</strong> (${esc(live.time)} WIB)`
+             : `Menampilkan jadwal <strong>Kelas ${esc(state.grade)}${esc(state.room)}</strong> · <strong>${esc(day ? day.day : "")}</strong>`;
   }
-  function escapeHtml(str = "") {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
+  setHtml($("statusText"), h);
+  renderSchedule(wib);
+}
 
-  /* Hanya perbarui DOM bila HTML berubah → isian proktor tidak terhapus tiap detik */
-  function setHtml(el, html) {
-    if (el._h !== html) { el._h = html; el.innerHTML = html; }
-  }
+/* ---- Modal ---- */
+const modal = $("proctorModal"), inUser = $("proctorUser"), inPin = $("proctorPin"), mErr = $("modalError");
+let lastFocus = null;
+function openModal(mode) {
+  lastFocus = document.activeElement; state.modalMode = mode; mErr.textContent = ""; inPin.value = "";
+  const login = mode === "login";
+  $("modalTitle").textContent = login ? "Login Akun Proktor" : "Ubah PIN Proktor";
+  $("modalDesc").textContent = login ? "Masukkan ID Proktor dan PIN untuk mengelola jadwal, token, dan tautan soal." : "Masukkan PIN baru (4–8 digit angka).";
+  $("fieldUserWrap").hidden = !login; inUser.required = login;
+  if (login) inUser.value = session.username || "";
+  $("labelPin").textContent = login ? "PIN Proktor" : "PIN Baru (4–8 Digit)";
+  $("btnSubmitModal").textContent = login ? "Masuk" : "Simpan PIN";
+  modal.hidden = false; (login ? inUser : inPin).focus();
+}
+function closeModal() { modal.hidden = true; if (lastFocus) lastFocus.focus(); }
 
-  function renderTicker() {
-    const track = document.getElementById("tickerTrack");
-    const singleSet = MOTIVATION_QUOTES.map(q =>
-      `<span class="ticker-item"><span class="dot">◆</span><span>${escapeHtml(q)}</span></span>`
-    ).join("");
-    track.innerHTML = singleSet + singleSet;
-  }
-
-  function isGasConfigured() {
-    return Boolean(GAS_URL && GAS_URL.startsWith("https://script.google.com/macros/s/"));
-  }
-
-  async function fetchCloudSchedule() {
-    if (!isGasConfigured()) return;
-    try {
-      const url = state.adminMode && proctorSession.pin
-        ? `${GAS_URL}?u=${encodeURIComponent(proctorSession.username)}&p=${encodeURIComponent(proctorSession.pin)}`
-        : GAS_URL;
-      const res = await fetch(url);
-      const json = await res.json();
-      if (json.status === "ok" && Array.isArray(json.data) && json.data.length > 0) {
-        state.schedule = json.data;
-        if (state.adminMode) store.set(STORAGE_KEY, JSON.stringify(json.data));
-        renderDays();
-        updateClockAndStatus();
-      } else if (json.status === "empty" && proctorSession.pin) {
-        await saveSchedule(state.schedule);
-      }
-    } catch (err) {
-      console.warn("Gagal memuat jadwal dari cloud:", err);
-    }
-  }
-
-  async function saveSchedule(data = state.schedule) {
-    store.set(STORAGE_KEY, JSON.stringify(data));
-    if (!isGasConfigured() || !proctorSession.pin) return;
-
-    showToast("Menyimpan ke Google Sheets...");
-    try {
-      const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          action: "saveSchedule",
-          username: proctorSession.username,
-          pin: proctorSession.pin,
-          schedule: data
-        })
-      });
-      const json = await res.json();
-      if (json.status === "ok") {
-        showToast("Tersinkronisasi ke Google Sheets!");
-      } else {
-        showToast("Gagal sinkron: " + (json.message || "Error"));
-      }
-    } catch (err) {
-      showToast("Tersimpan lokal (cek koneksi internet)");
-    }
-  }
-
-  function showToast(msg) {
-    const el = document.getElementById("toast");
-    el.textContent = msg;
-    el.classList.add("show");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => el.classList.remove("show"), 2200);
-  }
-
-  function getWibNow() {
-    const now = new Date();
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Jakarta",
-      year: "numeric", month: "2-digit", day: "2-digit",
-      hour: "2-digit", minute: "2-digit", second: "2-digit",
-      hour12: false
-    }).formatToParts(now);
-    const map = Object.fromEntries(parts.map(p => [p.type, p.value]));
-    const hh = map.hour === "24" ? "00" : map.hour;
-    return {
-      dateStr: `${map.year}-${map.month}-${map.day}`,
-      seconds: (+hh) * 3600 + (+map.minute) * 60 + (+map.second),
-      clockStr: `${hh}:${map.minute}:${map.second} WIB`
-    };
-  }
-
-  function parseTimeRangeSec(rangeStr = "") {
-    const m = rangeStr.match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
-    if (!m) return null;
-    return { start: (+m[1]) * 3600 + (+m[2]) * 60, end: (+m[3]) * 3600 + (+m[4]) * 60 };
-  }
-
-  function getSessionStatus(dayDate, timeRangeStr, wib) {
-    if (!dayDate) return "upcoming";
-    if (wib.dateStr > dayDate) return "done";
-    if (wib.dateStr < dayDate) return "upcoming";
-    const r = parseTimeRangeSec(timeRangeStr);
-    if (!r) return "upcoming";
-    const earlyStart = r.start - (EARLY_UNLOCK_MINUTES * 60);
-    if (wib.seconds >= earlyStart && wib.seconds <= r.end) return "live";
-    if (wib.seconds > r.end) return "done";
-    return "upcoming";
-  }
-
-  function renderRooms() {
-    const rooms = ROOMS_BY_GRADE[state.grade] || ["A"];
-    if (!rooms.includes(state.room)) state.room = rooms[0];
-    document.getElementById("rowRoom").innerHTML = "<b>Rombel</b>" + rooms.map(r =>
-      `<button type="button" data-r="${r}" class="${state.room === r ? "on" : ""}">${state.grade}${r}</button>`
-    ).join("");
-  }
-
-  function renderDays(wib = getWibNow()) {
-    document.getElementById("dayTabs").innerHTML = state.schedule.map((d, idx) => {
-      const isActive = idx === state.dayIndex;
-      const isToday = d.date === wib.dateStr;
-      return `<button type="button" data-d="${idx}" class="${isActive ? "on" : ""} ${isToday ? "today" : ""}">
-        ${escapeHtml(d.day)}
-        <span>${escapeHtml(d.labelDate || d.date)}</span>
-      </button>`;
-    }).join("");
-  }
-
-  let wasLiveSignature = "";
-
-  function renderSchedule(wib = getWibNow()) {
-    const container = document.getElementById("scheduleList");
-    const dayObj = state.schedule[state.dayIndex];
-    if (!dayObj) {
-      setHtml(container, `<p class="none">Jadwal hari ini belum tersedia.</p>`);
-      return;
-    }
-
-    const rawList = (dayObj.sessions && dayObj.sessions[state.grade]) || [];
-    const list = state.adminMode ? rawList : rawList.filter(item => !item.hidden);
-
-    if (!list.length) {
-      setHtml(container, `<p class="none">Belum ada sesi ujian yang ditampilkan untuk Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)} pada hari ${escapeHtml(dayObj.day)}.</p>`);
-      return;
-    }
-
-    // Jika baru masuk jam ujian dan token belum dimuat dari server, ambil ulang otomatis
-    if (!state.adminMode) {
-      const needsFetch = list.some(item => !item.break && getSessionStatus(dayObj.date, item.time, wib) === "live" && !item.token);
-      const sig = `${dayObj.date}_${state.grade}_${needsFetch}`;
-      if (needsFetch && sig !== wasLiveSignature) {
-        wasLiveSignature = sig;
-        fetchCloudSchedule();
-      }
-    }
-
-    setHtml(container, list.map((item, idx) => {
-      if (item.break) {
-        return `<div class="brk">${escapeHtml(item.break)}</div>`;
-      }
-
-      const status = getSessionStatus(dayObj.date, item.time, wib);
-      const isUnlocked = status === "live" && Boolean(item.token);
-
-      if (state.adminMode) {
-        return `
-          <div class="s e ${item.hidden ? "is-hidden-card" : ""}" data-idx="${idx}">
-            <div class="ed">
-              <input class="jm" data-f="jam" value="${escapeAttr(item.jam || "")}" placeholder="Jam ke-1" aria-label="Jam ke">
-              <input class="tm" data-f="time" value="${escapeAttr(item.time || "")}" placeholder="07.00 - 08.30" aria-label="Waktu">
-              <input data-f="subject" value="${escapeAttr(item.subject || "")}" placeholder="Mata Pelajaran" aria-label="Mata pelajaran">
-              <input data-f="token" value="${escapeAttr(item.token || "")}" placeholder="TOKEN" aria-label="Token">
-              <input data-f="link" value="${escapeAttr(item.link || "")}" placeholder="https://..." aria-label="Tautan soal">
-            </div>
-            <div class="act">
-              <button type="button" class="go btn-save-row">Simpan</button>
-              <button type="button" class="hd-btn btn-hide-row">${item.hidden ? "👁️ Tampilkan ke Siswa" : "🙈 Sembunyikan dari Siswa"}</button>
-              <button type="button" class="dl btn-del-row">Hapus</button>
-            </div>
-          </div>
-        `;
-      }
-
-      const badge = status === "live"
-        ? `<span class="live">SEDANG BERLANGSUNG</span>`
-        : status === "done"
-          ? `<span class="badge-done">SELESAI</span>`
-          : `<span class="badge-lock">🔒 TERKUNCI</span>`;
-
-      const safeLink = /^https?:\/\//i.test(item.link || "") ? item.link : "#";
-
-      return `
-        <article class="s">
-          <div class="t">
-            <b>${escapeHtml(item.jam || "")}</b>
-            ${escapeHtml(item.time || "")}
-          </div>
-          <div>
-            <h3>${escapeHtml(item.subject || "")} ${badge}</h3>
-            <div class="sub-meta">Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)} · ${escapeHtml(dayObj.day)}, ${escapeHtml(dayObj.labelDate || dayObj.date)}</div>
-          </div>
-          <div class="act">
-            ${isUnlocked ? `
-              <span class="tok-wrap">
-                <span class="tok">${escapeHtml(item.token)}</span>
-                <button type="button" class="copy-btn" data-token="${escapeAttr(item.token)}">Salin Token</button>
-              </span>
-              <a class="btn go" href="${escapeAttr(safeLink)}" target="_blank" rel="noopener noreferrer">Buka Soal</a>
-            ` : `
-              <span class="tok-wrap">
-                <span class="tok locked">••••••</span>
-              </span>
-              <button type="button" class="btn-locked" disabled>
-                ${status === "done" ? "Waktu Ujian Berakhir" : "Menunggu Jam Ujian"}
-              </button>
-            `}
-          </div>
-        </article>
-      `;
-    }).join(""));
-  }
-
-  function updateClockAndStatus() {
-    const wib = getWibNow();
-    document.getElementById("clockDisplay").textContent = wib.clockStr;
-
-    const firstDate = state.schedule[0]?.date;
-    const lastDate = state.schedule[state.schedule.length - 1]?.date;
-    const statusText = document.getElementById("statusText");
-    let html;
-
-    if (firstDate && wib.dateStr < firstDate) {
-      html = `Pelaksanaan ASAS Ganjil dimulai <strong>${escapeHtml(state.schedule[0].day)}, ${escapeHtml(state.schedule[0].labelDate)}</strong> pukul <strong>07.00 WIB</strong>.`;
-    } else if (lastDate && wib.dateStr > lastDate) {
-      html = `Rangkaian jadwal ASAS Ganjil (<strong>${escapeHtml(state.schedule[0].labelDate)} – ${escapeHtml(state.schedule[state.schedule.length - 1].labelDate)}</strong>) telah selesai.`;
+$("proctorForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const pin = inPin.value.trim(), btn = $("btnSubmitModal");
+  btn.disabled = true; mErr.textContent = "Memverifikasi ke server...";
+  try {
+    if (state.modalMode === "login") {
+      const u = inUser.value.trim();
+      const j = await api({ action: "login", username: u, pin });
+      if (j.status !== "ok") { mErr.textContent = j.message || "ID Proktor atau PIN salah."; return; }
+      session = { username: u, pin }; state.adminMode = true;
+      $("adminBar").hidden = false; $("proctorBadge").textContent = "Proktor: " + u;
+      $("toggleAdminLink").textContent = "Mode Proktor Aktif";
+      modal.hidden = true; await fetchCloudSchedule(); renderSchedule(); showToast("Berhasil masuk mode proktor");
     } else {
-      const todayIdx = state.schedule.findIndex(d => d.date === wib.dateStr);
-      const activeDay = todayIdx >= 0 ? state.schedule[todayIdx] : state.schedule[state.dayIndex];
-      const sessions = (activeDay?.sessions?.[state.grade] || []).filter(x => !x.break && !x.hidden);
-      const liveItem = sessions.find(x => getSessionStatus(activeDay.date, x.time, wib) === "live");
-      if (liveItem) {
-        html = `Sesi aktif Kelas <strong>${escapeHtml(state.grade)}${escapeHtml(state.room)}</strong>: <strong>${escapeHtml(liveItem.subject)}</strong> (${escapeHtml(liveItem.time)} WIB)`;
-      } else {
-        html = `Menampilkan jadwal <strong>Kelas ${escapeHtml(state.grade)}${escapeHtml(state.room)}</strong> · <strong>${escapeHtml(activeDay?.day || "")}</strong>`;
-      }
+      if (!/^\d{4,8}$/.test(pin)) { mErr.textContent = "PIN harus 4–8 digit angka."; return; }
+      const j = await api({ action: "changePin", username: session.username, pin: session.pin, newPin: pin });
+      if (j.status !== "ok") { mErr.textContent = j.message || "Gagal mengubah PIN."; return; }
+      session.pin = pin; closeModal(); showToast("PIN proktor diperbarui");
     }
-    setHtml(statusText, html);
-
-    renderSchedule(wib);
+  } catch (err) { mErr.textContent = "Gagal terhubung ke server."; }
+  finally { btn.disabled = false; }
+});
+$("btnCancelModal").addEventListener("click", closeModal);
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+document.addEventListener("keydown", e => {
+  if (modal.hidden) return;
+  if (e.key === "Escape") return closeModal();
+  if (e.key === "Tab") { // focus trap sederhana
+    const f = [...modal.querySelectorAll("input,button")].filter(x => !x.disabled && x.offsetParent !== null);
+    const a = f[0], z = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+    else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
   }
+});
 
-  const modal = document.getElementById("proctorModal");
-  const modalForm = document.getElementById("proctorForm");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalDesc = document.getElementById("modalDesc");
-  const fieldUserWrap = document.getElementById("fieldUserWrap");
-  const inputUser = document.getElementById("proctorUser");
-  const inputPin = document.getElementById("proctorPin");
-  const labelPin = document.getElementById("labelPin");
-  const modalError = document.getElementById("modalError");
+/* ---- Filter ---- */
+$("rowGrade").addEventListener("click", e => {
+  const b = e.target.closest("button[data-g]"); if (!b) return;
+  state.grade = b.dataset.g;
+  document.querySelectorAll("#rowGrade button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  renderRooms(); updateClockAndStatus();
+});
+$("rowRoom").addEventListener("click", e => {
+  const b = e.target.closest("button[data-r]"); if (!b) return;
+  state.room = b.dataset.r; renderRooms(); updateClockAndStatus();
+});
+$("dayTabs").addEventListener("click", e => {
+  const b = e.target.closest("button[data-d]"); if (!b) return;
+  state.dayIndex = +b.dataset.d; renderDays(); updateClockAndStatus();
+});
 
-  function openModal(mode) {
-    state.modalMode = mode;
-    modalError.textContent = "";
-    inputPin.value = "";
-
-    if (mode === "login") {
-      modalTitle.textContent = "Login Akun Proktor";
-      modalDesc.textContent = "Masukkan ID Proktor dan PIN keamanan untuk mengelola jadwal, token, serta tautan soal.";
-      fieldUserWrap.hidden = false;
-      inputUser.required = true;
-      inputUser.value = proctorSession.username || "proktor";
-      labelPin.textContent = "PIN Proktor";
-      document.getElementById("btnSubmitModal").textContent = "Masuk";
-    } else if (mode === "changePin") {
-      modalTitle.textContent = "Ubah PIN Proktor";
-      modalDesc.textContent = "Masukkan PIN baru (4–8 digit angka) untuk akun proktor.";
-      fieldUserWrap.hidden = true;
-      inputUser.required = false;
-      labelPin.textContent = "PIN Baru (4–8 Digit)";
-      document.getElementById("btnSubmitModal").textContent = "Simpan PIN";
+/* ---- Aksi proktor ---- */
+function collectRows() {
+  const list = state.schedule[state.dayIndex]?.sessions?.[state.grade]; if (!list) return null;
+  document.querySelectorAll(".s.e[data-idx]").forEach(card => {
+    const i = +card.dataset.idx, v = f => card.querySelector(`[data-f="${f}"]`).value.trim();
+    list[i] = { ...list[i], jam: v("jam"), time: v("time"), subject: v("subject").toUpperCase(), token: v("token").toUpperCase(), link: v("link") };
+  });
+  return list;
+}
+$("scheduleList").addEventListener("click", async e => {
+  const cb = e.target.closest(".copy-btn");
+  if (cb) {
+    const t = cb.dataset.token;
+    try { await navigator.clipboard.writeText(t); showToast(`Token ${t} disalin!`); }
+    catch (err) {
+      const r = document.createRange(); r.selectNodeContents(cb.previousElementSibling);
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r); showToast("Token terpilih — salin manual (Ctrl+C)");
     }
-
-    modal.hidden = false;
-    (mode === "login" ? inputUser : inputPin).focus();
+    return;
   }
+  const card = e.target.closest(".s.e[data-idx]"); if (!card) return;
+  const idx = +card.dataset.idx, list = collectRows(); if (!list) return;
+  const link = list[idx].link;
+  if (e.target.closest(".btn-save") && link && !/^https?:\/\//i.test(link)) return showToast("Tautan harus diawali http:// atau https://");
+  if (e.target.closest(".btn-hide")) list[idx].hidden = !list[idx].hidden;
+  else if (e.target.closest(".btn-del")) { if (!confirm("Hapus sesi ini?")) return; list.splice(idx, 1); }
+  else if (!e.target.closest(".btn-save")) return;
+  document.activeElement.blur(); renderSchedule(); await saveSchedule();
+});
+$("btnAddSession").addEventListener("click", async () => {
+  const day = state.schedule[state.dayIndex]; if (!day) return;
+  const list = collectRows() || (day.sessions[state.grade] = []);
+  list.push({ jam: "Jam ke-5", time: "12.00 - 13.00", subject: "MATA PELAJARAN BARU", token: "", link: "", hidden: false });
+  renderSchedule(); await saveSchedule();
+});
+$("btnChangePin").addEventListener("click", () => openModal("changePin"));
+$("btnResetData").addEventListener("click", async () => {
+  if (!confirm("Kembalikan jadwal ke default? Seluruh token dan tautan akan dikosongkan.")) return;
+  state.schedule = defaultSchedule(); renderDays(); updateClockAndStatus(); await saveSchedule();
+});
+$("btnCloseAdmin").addEventListener("click", async () => {
+  state.adminMode = false; session = { username: "", pin: "" };
+  state.schedule = defaultSchedule(); $("adminBar").hidden = true;
+  $("toggleAdminLink").textContent = "Login Proktor";
+  renderDays(); updateClockAndStatus(); await fetchCloudSchedule(); showToast("Keluar dari mode proktor");
+});
+const aLink = $("toggleAdminLink");
+const onAdmin = () => state.adminMode ? $("adminBar").scrollIntoView({ behavior: "smooth", block: "nearest" }) : openModal("login");
+aLink.addEventListener("click", onAdmin);
+aLink.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onAdmin(); } });
 
-  function closeModal() { modal.hidden = true; }
+/* ---- Tema ---- */
+function applyTheme(t) {
+  if (t === "dark" || t === "light") { document.documentElement.setAttribute("data-theme", t); store.set(THEME_KEY, t); }
+  const dark = document.documentElement.getAttribute("data-theme") === "dark" || (!document.documentElement.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+  $("btnTheme").setAttribute("aria-pressed", dark);
+  $("btnTheme").setAttribute("aria-label", dark ? "Ganti ke tema terang" : "Ganti ke tema gelap");
+}
+const saved = store.get(THEME_KEY); applyTheme(saved);
+$("btnTheme").addEventListener("click", () => {
+  const dark = $("btnTheme").getAttribute("aria-pressed") === "true";
+  applyTheme(dark ? "light" : "dark"); showToast(dark ? "Tema terang aktif" : "Tema gelap aktif");
+});
 
-  modalForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const pinVal = inputPin.value.trim();
-    const btnSubmit = document.getElementById("btnSubmitModal");
-
-    if (!isGasConfigured()) {
-      modalError.textContent = "URL Google Apps Script belum diisi pada kode.";
-      return;
-    }
-
-    btnSubmit.disabled = true;
-    modalError.textContent = "Memverifikasi ke server...";
-
-    try {
-      if (state.modalMode === "login") {
-        const userVal = inputUser.value.trim();
-        const res = await fetch(GAS_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "login", username: userVal, pin: pinVal })
-        });
-        const json = await res.json();
-
-        if (json.status === "ok") {
-          proctorSession = { username: userVal, pin: pinVal };
-          state.adminMode = true;
-          document.getElementById("adminBar").hidden = false;
-          document.getElementById("proctorBadge").textContent = `Proktor: ${userVal}`;
-          document.getElementById("toggleAdminLink").textContent = "Mode Proktor Aktif";
-          closeModal();
-          await fetchCloudSchedule();
-          renderSchedule();
-          showToast("Berhasil masuk mode proktor");
-        } else {
-          modalError.textContent = json.message || "ID Proktor atau PIN salah.";
-        }
-      } else if (state.modalMode === "changePin") {
-        if (!/^\d{4,8}$/.test(pinVal)) {
-          modalError.textContent = "PIN harus berupa 4 hingga 8 digit angka.";
-          return;
-        }
-        const res = await fetch(GAS_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: "changePin",
-            username: proctorSession.username,
-            pin: proctorSession.pin,
-            newPin: pinVal
-          })
-        });
-        const json = await res.json();
-        if (json.status === "ok") {
-          proctorSession.pin = pinVal;
-          closeModal();
-          showToast("PIN proktor diperbarui di server");
-        } else {
-          modalError.textContent = json.message || "Gagal mengubah PIN.";
-        }
-      }
-    } catch (err) {
-      modalError.textContent = "Gagal terhubung ke server.";
-    } finally {
-      btnSubmit.disabled = false;
-    }
-  });
-
-  document.getElementById("btnCancelModal").addEventListener("click", closeModal);
-  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
-
-  document.getElementById("rowGrade").addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-g]");
-    if (!btn) return;
-    state.grade = btn.dataset.g;
-    document.querySelectorAll("#rowGrade button").forEach(b => b.classList.toggle("on", b === btn));
-    renderRooms();
-    updateClockAndStatus();
-  });
-
-  document.getElementById("rowRoom").addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-r]");
-    if (!btn) return;
-    state.room = btn.dataset.r;
-    renderRooms();
-    updateClockAndStatus();
-  });
-
-  document.getElementById("dayTabs").addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-d]");
-    if (!btn) return;
-    state.dayIndex = +btn.dataset.d;
-    renderDays();
-    updateClockAndStatus();
-  });
-
-  document.getElementById("scheduleList").addEventListener("click", async (e) => {
-    const copyBtn = e.target.closest(".copy-btn");
-    if (copyBtn) {
-      const tok = copyBtn.dataset.token || "";
-      if (!tok || tok === "-") return;
-      try {
-        await navigator.clipboard.writeText(tok);
-        showToast(`Token ${tok} disalin!`);
-      } catch (err) {
-        // Cadangan: pilih teks token agar bisa disalin manual
-        const tokEl = copyBtn.previousElementSibling;
-        if (tokEl) {
-          const r = document.createRange();
-          r.selectNodeContents(tokEl);
-          const sel = getSelection();
-          sel.removeAllRanges();
-          sel.addRange(r);
-        }
-        showToast("Token terpilih — tekan Salin (Ctrl+C) secara manual");
-      }
-      return;
-    }
-
-    const card = e.target.closest(".s.e[data-idx]");
-    if (!card) return;
-    const idx = +card.dataset.idx;
-    const dayObj = state.schedule[state.dayIndex];
-    const list = dayObj?.sessions?.[state.grade];
-    if (!list) return;
-
-    if (e.target.closest(".btn-save-row")) {
-      const getVal = (f) => card.querySelector(`[data-f="${f}"]`)?.value.trim() || "";
-      list[idx] = {
-        ...list[idx],
-        jam: getVal("jam"),
-        time: getVal("time"),
-        subject: getVal("subject").toUpperCase(),
-        token: getVal("token").toUpperCase(),
-        link: getVal("link")
-      };
-      renderSchedule();
-      await saveSchedule();
-    } else if (e.target.closest(".btn-hide-row")) {
-      list[idx].hidden = !list[idx].hidden;
-      renderSchedule();
-      await saveSchedule();
-    } else if (e.target.closest(".btn-del-row")) {
-      if (!confirm("Hapus sesi ini?")) return;
-      list.splice(idx, 1);
-      renderSchedule();
-      await saveSchedule();
-    }
-  });
-
-  document.getElementById("btnAddSession").addEventListener("click", async () => {
-    const dayObj = state.schedule[state.dayIndex];
-    if (!dayObj) return;
-    dayObj.sessions[state.grade] = dayObj.sessions[state.grade] || [];
-    dayObj.sessions[state.grade].push({
-      jam: "Jam ke-5",
-      time: "12.00 - 13.00",
-      subject: "MATA PELAJARAN BARU",
-      token: "",
-      link: "",
-      hidden: false
-    });
-    renderSchedule();
-    await saveSchedule();
-  });
-
-  document.getElementById("btnChangePin").addEventListener("click", () => openModal("changePin"));
-
-  document.getElementById("btnResetData").addEventListener("click", async () => {
-    if (!confirm("Kembalikan jadwal ke default? Seluruh token dan tautan akan dikosongkan.")) return;
-    state.schedule = buildDefaultSchedule();
-    renderDays();
-    updateClockAndStatus();
-    await saveSchedule();
-  });
-
-  document.getElementById("btnCloseAdmin").addEventListener("click", async () => {
-    state.adminMode = false;
-    proctorSession = { username: "", pin: "" };
-    store.del(STORAGE_KEY);                 // hapus cache token di perangkat
-    state.schedule = buildDefaultSchedule(); // buang data proktor dari memori
-    document.getElementById("adminBar").hidden = true;
-    document.getElementById("toggleAdminLink").textContent = "Login Proktor";
-    renderDays();
-    updateClockAndStatus();
-    await fetchCloudSchedule();
-    showToast("Keluar dari mode proktor");
-  });
-
-  const adminLink = document.getElementById("toggleAdminLink");
-  function handleAdminLinkClick() {
-    if (state.adminMode) {
-      document.getElementById("adminBar").scrollIntoView({ behavior: "smooth", block: "nearest" });
-    } else {
-      openModal("login");
-    }
+/* ---- Polling: acak (jitter) & lebih rapat mendekati jam mulai ---- */
+function nextDelay() {
+  const w = getWibNow(), d = state.schedule.find(x => x.date === w.dateStr);
+  let near = false;
+  if (d) for (const g in d.sessions) for (const s of d.sessions[g]) {
+    if (s.break) continue; const r = parseRange(s.time);
+    if (r && w.seconds >= r.start - 600 && w.seconds <= r.start + 300) near = true;
   }
-  adminLink.addEventListener("click", handleAdminLinkClick);
-  adminLink.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleAdminLinkClick();
-    }
-  });
+  return near ? 12000 + Math.random() * 6000 : 45000 + Math.random() * 30000;
+}
+function poll() { setTimeout(() => { if (!state.adminMode && !document.hidden) fetchCloudSchedule(); poll(); }, nextDelay()); }
 
-  const btnTheme = document.getElementById("btnTheme");
-  function applyTheme(theme) {
-    if (theme === "dark" || theme === "light") {
-      document.documentElement.setAttribute("data-theme", theme);
-      store.set(THEME_KEY, theme);
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-      store.del(THEME_KEY);
-    }
-  }
-  const savedTheme = store.get(THEME_KEY);
-  if (savedTheme) applyTheme(savedTheme);
-
-  btnTheme.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const isDark = current === "dark" || (!current && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    const next = isDark ? "light" : "dark";
-    applyTheme(next);
-    showToast(next === "dark" ? "Tema gelap aktif" : "Tema terang aktif");
-  });
-
-  renderTicker();
-  const wibInit = getWibNow();
-  const matchedDayIdx = state.schedule.findIndex(d => d.date === wibInit.dateStr);
-  if (matchedDayIdx >= 0) state.dayIndex = matchedDayIdx;
-
-  renderRooms();
-  renderDays(wibInit);
-  updateClockAndStatus();
-  fetchCloudSchedule();
-  setInterval(updateClockAndStatus, 1000);
-
-  // Segarkan jadwal & token otomatis untuk siswa (tidak mengganggu pengeditan proktor)
-  setInterval(() => { if (!state.adminMode && !document.hidden) fetchCloudSchedule(); }, 60000);
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && !state.adminMode) fetchCloudSchedule();
-  });
+/* ---- Mulai ---- */
+renderTicker();
+{ const i = state.schedule.findIndex(d => d.date === getWibNow().dateStr); if (i >= 0) state.dayIndex = i; }
+renderRooms(); renderDays(); updateClockAndStatus();
+fetchCloudSchedule(); poll();
+setInterval(updateClockAndStatus, 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && !state.adminMode) fetchCloudSchedule(); });
 </script>
 </body>
 </html>
