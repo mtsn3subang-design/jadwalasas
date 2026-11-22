@@ -67,7 +67,9 @@ button[aria-pressed="true"]{background:var(--em);border-color:var(--em);color:#f
 .ed{display:flex;flex-wrap:wrap;gap:8px;width:100%}
 .ed input{font:14px Poppins,sans-serif;color:var(--ink);background:var(--tok);border:1px solid var(--line);border-radius:10px;padding:8px 12px;flex:1 1 240px;min-width:0}
 .ed input.tm{flex:0 1 160px}.ed input.jm{flex:0 1 120px}
+.ed select{font:14px Poppins,sans-serif;color:var(--ink);background:var(--tok);border:1px solid var(--line);border-radius:10px;padding:8px 12px;flex:0 1 200px}
 .ed input[data-f="token"]{flex:0 1 150px;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}
+.grp{display:grid;gap:8px;margin-top:10px;width:100%}.gr input.rm{flex:0 1 150px}.gr input[data-g="token"]{flex:0 1 130px;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}.gr .dl{padding:6px 12px}
 .s.e{grid-template-columns:1fr}
 .dl{color:#c0392b;border-color:#c0392b;font-size:12.5px;padding:5px 12px}
 .hd-btn{color:var(--gold);border-color:var(--gold);font-size:12.5px;padding:5px 12px}
@@ -127,12 +129,15 @@ button[aria-pressed="true"]{background:var(--em);border-color:var(--em);color:#f
 <div class="adm" id="adminBar" hidden>
 <strong id="proctorBadge">Proktor</strong>
 <button type="button" id="btnAddSession">+ Tambah Sesi</button>
+<button type="button" id="btnOpenAll" title="Hari yang sedang dipilih, semua tingkat">🔓 Buka Semua</button>
+<button type="button" id="btnLockAll" title="Hari yang sedang dipilih, semua tingkat">🔒 Kunci Semua</button>
+<button type="button" id="btnAutoAll" title="Hari yang sedang dipilih, semua tingkat">⏱ Otomatis Semua</button>
 <button type="button" id="btnChangePin">Ubah PIN</button>
 <button type="button" id="btnResetData" class="dl">Reset Jadwal Default</button>
 <button type="button" id="btnCloseAdmin">Keluar Proktor</button>
 </div>
 
-<p class="note">Token dan tautan soal terbuka otomatis 5 menit sebelum jam ujian dimulai. · <a id="toggleAdminLink" role="button" tabindex="0">Login Proktor</a></p>
+<p class="note">Token dan tautan soal terbuka otomatis 5 menit sebelum jam ujian dimulai, kecuali diatur manual oleh proktor. · <a id="toggleAdminLink" role="button" tabindex="0">Login Proktor</a></p>
 </main>
 
 <div class="modal-backdrop" id="proctorModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -174,7 +179,7 @@ function defaultSchedule() {
   return days.map((d, i) => {
     const fri = i === 4, sessions = {};
     ["7","8","9"].forEach(g => {
-      const mk = (jam, time, subject) => ({ jam, time, subject, token: "", link: "", hidden: false });
+      const mk = (jam, time, subject) => ({ jam, time, subject, token: "", link: "", hidden: false, mode: "auto" });
       sessions[g] = [
         mk("Jam ke-1", "07.00 - 08.30", d[3][0]),
         mk("Jam ke-2", "08.30 - 10.00", d[3][1]),
@@ -215,18 +220,21 @@ async function rpc(fn, args) {
 }
 function api(b) {
   const c = { u: b.username, p: b.pin };
-  if (b.action === "getSchedule") return b.pin ? rpc("proktor_get", c) : rpc("get_jadwal");
+  if (b.action === "getSchedule") return b.pin ? rpc("proktor_get", c) : rpc("get_jadwal", { kelas: b.kelas, rombel: b.rombel });
   if (b.action === "login") return rpc("proktor_login", c);
   if (b.action === "saveSchedule") return rpc("proktor_save", { ...c, d: b.schedule });
   if (b.action === "changePin") return rpc("proktor_ganti_pin", { ...c, pin_baru: b.newPin });
   return Promise.reject(new Error("aksi tidak dikenal"));
 }
 
+let fetchSeq = 0;
 async function fetchCloudSchedule() {
+  const my = ++fetchSeq;
   try {
-    const body = { action: "getSchedule" };
+    const body = { action: "getSchedule", kelas: state.grade, rombel: state.room };
     if (state.adminMode) { body.username = session.username; body.pin = session.pin; }
     const json = await api(body);
+    if (my !== fetchSeq) return;
     if (json.now) serverOffset = json.now - Date.now();
     if (json.status === "ok" && Array.isArray(json.data) && json.data.length) {
       state.schedule = json.data;
@@ -259,7 +267,9 @@ function parseRange(s = "") {
   const m = s.match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
   return m ? { start: +m[1] * 3600 + +m[2] * 60, end: +m[3] * 3600 + +m[4] * 60 } : null;
 }
-function statusOf(date, time, wib) {
+function statusOf(date, time, wib, mode) {
+  if (mode === "open") return "live";     // dibuka paksa oleh proktor
+  if (mode === "locked") return "closed"; // dikunci oleh proktor
   if (!date) return "upcoming";
   if (wib.dateStr > date) return "done";
   if (wib.dateStr < date) return "upcoming";
@@ -294,8 +304,8 @@ function renderSchedule(wib = getWibNow()) {
   if (!list.length) return setHtml(box, `<p class="none">Belum ada sesi ujian untuk Kelas ${esc(state.grade)}${esc(state.room)} pada hari ${esc(day.day)}.</p>`);
 
   if (!state.adminMode) {
-    const need = list.some(x => !x.break && statusOf(day.date, x.time, wib) === "live" && !x.token);
-    const sig = `${day.date}_${state.grade}_${need}_${Math.floor(wib.seconds / 20)}`;
+    const need = list.some(x => !x.break && statusOf(day.date, x.time, wib, x.mode) === "live" && !x.token);
+    const sig = `${day.date}_${state.grade}${state.room}_${need}_${Math.floor(wib.seconds / 20)}`;
     if (need && sig !== fetchSig) { fetchSig = sig; fetchCloudSchedule(); }
   }
 
@@ -307,21 +317,25 @@ function renderSchedule(wib = getWibNow()) {
 <input class="tm" data-f="time" value="${esc(it.time)}" aria-label="Waktu">
 <input data-f="subject" value="${esc(it.subject)}" aria-label="Mata pelajaran">
 <input data-f="token" value="${esc(it.token)}" placeholder="TOKEN" aria-label="Token">
-<input data-f="link" value="${esc(it.link)}" placeholder="https://..." aria-label="Tautan soal"></div>
+<input data-f="link" value="${esc(it.link)}" placeholder="Link utama (https://...)" aria-label="Tautan soal utama">
+<select data-f="mode" aria-label="Status buka atau tutup"><option value="auto"${(it.mode||"auto")==="auto"?" selected":""}>⏱ Otomatis (sesuai jam)</option><option value="open"${it.mode==="open"?" selected":""}>🔓 Dibuka proktor</option><option value="locked"${it.mode==="locked"?" selected":""}>🔒 Dikunci proktor</option></select></div>
+<div class="grp"><div class="sub-meta">Link utama berlaku untuk semua rombel. Tambahkan link khusus bila beda guru (kosongkan token untuk memakai token utama):</div>
+${(it.groups || []).map((g, gi) => `<div class="ed gr" data-gi="${gi}"><input class="rm" data-g="rooms" value="${esc(g.rooms)}" placeholder="Rombel, mis. A-D" aria-label="Rombel untuk link ini"><input data-g="token" value="${esc(g.token)}" placeholder="TOKEN" aria-label="Token khusus"><input data-g="link" value="${esc(g.link)}" placeholder="Link guru (https://...)" aria-label="Link khusus"><button type="button" class="dl btn-delgrp" data-gi="${gi}" aria-label="Hapus link ini">✕</button></div>`).join("")}
+<div><button type="button" class="hd-btn btn-addgrp">+ Link per Rombel/Guru</button></div></div>
 <div class="act"><button type="button" class="go btn-save">Simpan Semua Perubahan</button>
 <button type="button" class="hd-btn btn-hide">${it.hidden ? "👁️ Tampilkan ke Siswa" : "🙈 Sembunyikan dari Siswa"}</button>
 <button type="button" class="dl btn-del">Hapus</button></div></div>`;
 
-    const st = statusOf(day.date, it.time, wib);
+    const st = statusOf(day.date, it.time, wib, it.mode);
     const open = st === "live" && !!it.token;
-    const badge = st === "live" ? `<span class="live">SEDANG BERLANGSUNG</span>` : st === "done" ? `<span class="badge-done">SELESAI</span>` : `<span class="badge-lock">🔒 TERKUNCI</span>`;
+    const badge = st === "live" ? `<span class="live">SEDANG BERLANGSUNG</span>` : st === "closed" ? `<span class="badge-lock">⛔ DITUTUP PROKTOR</span>` : st === "done" ? `<span class="badge-done">SELESAI</span>` : `<span class="badge-lock">🔒 TERKUNCI</span>`;
     const link = /^https?:\/\//i.test(it.link || "") ? it.link : "#";
     return `
 <article class="s"><div class="t"><b>${esc(it.jam)}</b>${esc(it.time)}</div>
 <div><h3>${esc(it.subject)} ${badge}</h3><div class="sub-meta">Kelas ${esc(state.grade)}${esc(state.room)} · ${esc(day.day)}, ${esc(day.labelDate || day.date)}</div></div>
 <div class="act">${open
   ? `<span class="tok">${esc(it.token)}</span><button type="button" class="copy-btn" data-token="${esc(it.token)}">Salin Token</button><a class="btn go" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Buka Soal</a>`
-  : `<span class="tok locked">••••••</span><button type="button" class="btn-locked" disabled>${st === "done" ? "Waktu Ujian Berakhir" : "Menunggu Jam Ujian"}</button>`}</div></article>`;
+  : `<span class="tok locked">••••••</span><button type="button" class="btn-locked" disabled>${st === "closed" ? "Ditutup oleh Proktor" : st === "done" ? "Waktu Ujian Berakhir" : "Menunggu Jam Ujian"}</button>`}</div></article>`;
   }).join(""));
 }
 
@@ -334,7 +348,7 @@ function updateClockAndStatus() {
   else if (last && wib.dateStr > last.date) h = `Rangkaian jadwal ASAS Ganjil (<strong>${esc(first.labelDate)} – ${esc(last.labelDate)}</strong>) telah selesai.`;
   else {
     const day = state.schedule.find(d => d.date === wib.dateStr) || state.schedule[state.dayIndex];
-    const live = ((day && day.sessions && day.sessions[state.grade]) || []).filter(x => !x.break && !x.hidden).find(x => statusOf(day.date, x.time, wib) === "live");
+    const live = ((day && day.sessions && day.sessions[state.grade]) || []).filter(x => !x.break && !x.hidden).find(x => statusOf(day.date, x.time, wib, x.mode) === "live");
     h = live ? `Sesi aktif Kelas <strong>${esc(state.grade)}${esc(state.room)}</strong>: <strong>${esc(live.subject)}</strong> (${esc(live.time)} WIB)`
              : `Menampilkan jadwal <strong>Kelas ${esc(state.grade)}${esc(state.room)}</strong> · <strong>${esc(day ? day.day : "")}</strong>`;
   }
@@ -398,23 +412,35 @@ $("rowGrade").addEventListener("click", e => {
   const b = e.target.closest("button[data-g]"); if (!b) return;
   state.grade = b.dataset.g;
   document.querySelectorAll("#rowGrade button").forEach(x => x.setAttribute("aria-pressed", x === b));
-  renderRooms(); updateClockAndStatus();
+  switchClass();
 });
 $("rowRoom").addEventListener("click", e => {
   const b = e.target.closest("button[data-r]"); if (!b) return;
-  state.room = b.dataset.r; renderRooms(); updateClockAndStatus();
+  state.room = b.dataset.r; switchClass();
 });
 $("dayTabs").addEventListener("click", e => {
   const b = e.target.closest("button[data-d]"); if (!b) return;
   state.dayIndex = +b.dataset.d; renderDays(); updateClockAndStatus();
 });
 
+/* ---- Rombel & ganti kelas (siswa) ---- */
+function expandRooms(s) { // "8A-8D, F" → "ABCDF"
+  return String(s).toUpperCase().replace(/\d/g, "")
+    .replace(/([A-Z])\s*-\s*([A-Z])/g, (m, a, b) => { let o = ""; for (let c = a.charCodeAt(0); c <= b.charCodeAt(0); c++) o += String.fromCharCode(c); return o; })
+    .replace(/[^A-Z]/g, "");
+}
+function switchClass() { // kosongkan token milik kelas sebelumnya lalu minta yang sesuai
+  if (!state.adminMode) state.schedule.forEach(d => Object.values(d.sessions).forEach(l => l.forEach(s => { if (!s.break) { s.token = ""; s.link = ""; } })));
+  renderRooms(); updateClockAndStatus();
+  if (!state.adminMode) fetchCloudSchedule();
+}
+
 /* ---- Aksi proktor ---- */
 function collectRows() {
   const list = state.schedule[state.dayIndex]?.sessions?.[state.grade]; if (!list) return null;
   document.querySelectorAll(".s.e[data-idx]").forEach(card => {
     const i = +card.dataset.idx, v = f => card.querySelector(`[data-f="${f}"]`).value.trim();
-    list[i] = { ...list[i], jam: v("jam"), time: v("time"), subject: v("subject").toUpperCase(), token: v("token").toUpperCase(), link: v("link") };
+    list[i] = { ...list[i], jam: v("jam"), time: v("time"), subject: v("subject").toUpperCase(), token: v("token").toUpperCase(), link: v("link"), mode: v("mode") || "auto", groups: [...card.querySelectorAll(".gr")].map(r => ({ rooms: expandRooms(r.querySelector('[data-g="rooms"]').value), token: r.querySelector('[data-g="token"]').value.trim().toUpperCase(), link: r.querySelector('[data-g="link"]').value.trim() })) };
   });
   return list;
 }
@@ -432,7 +458,13 @@ $("scheduleList").addEventListener("click", async e => {
   const card = e.target.closest(".s.e[data-idx]"); if (!card) return;
   const idx = +card.dataset.idx, list = collectRows(); if (!list) return;
   const link = list[idx].link;
-  if (e.target.closest(".btn-save") && link && !/^https?:\/\//i.test(link)) return showToast("Tautan harus diawali http:// atau https://");
+  if (e.target.closest(".btn-addgrp")) { (list[idx].groups = list[idx].groups || []).push({ rooms: "", token: "", link: "" }); document.activeElement.blur(); return renderSchedule(); }
+  if (e.target.closest(".btn-delgrp")) { list[idx].groups.splice(+e.target.closest(".btn-delgrp").dataset.gi, 1); document.activeElement.blur(); renderSchedule(); return saveSchedule(); }
+  if (e.target.closest(".btn-save")) {
+    const bad = (link && !/^https?:\/\//i.test(link)) || (list[idx].groups || []).some(g => g.link && !/^https?:\/\//i.test(g.link));
+    if (bad) return showToast("Semua link harus diawali http:// atau https://");
+    list[idx].groups = (list[idx].groups || []).filter(g => g.rooms || g.token || g.link);
+  }
   if (e.target.closest(".btn-hide")) list[idx].hidden = !list[idx].hidden;
   else if (e.target.closest(".btn-del")) { if (!confirm("Hapus sesi ini?")) return; list.splice(idx, 1); }
   else if (!e.target.closest(".btn-save")) return;
@@ -441,7 +473,7 @@ $("scheduleList").addEventListener("click", async e => {
 $("btnAddSession").addEventListener("click", async () => {
   const day = state.schedule[state.dayIndex]; if (!day) return;
   const list = collectRows() || (day.sessions[state.grade] = []);
-  list.push({ jam: "Jam ke-5", time: "12.00 - 13.00", subject: "MATA PELAJARAN BARU", token: "", link: "", hidden: false });
+  list.push({ jam: "Jam ke-5", time: "12.00 - 13.00", subject: "MATA PELAJARAN BARU", token: "", link: "", hidden: false, mode: "auto" });
   renderSchedule(); await saveSchedule();
 });
 $("btnChangePin").addEventListener("click", () => openModal("changePin"));
@@ -459,6 +491,21 @@ const aLink = $("toggleAdminLink");
 const onAdmin = () => state.adminMode ? $("adminBar").scrollIntoView({ behavior: "smooth", block: "nearest" }) : openModal("login");
 aLink.addEventListener("click", onAdmin);
 aLink.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onAdmin(); } });
+
+$("scheduleList").addEventListener("change", async e => {
+  if (!e.target.matches('select[data-f="mode"]') || !collectRows()) return;
+  document.activeElement.blur(); renderSchedule(); await saveSchedule();
+});
+async function setModeAll(mode, label) {
+  const day = state.schedule[state.dayIndex]; if (!day) return;
+  if (!confirm(`${label} untuk SEMUA sesi (semua tingkat) pada hari ${day.day}?`)) return;
+  collectRows();
+  Object.values(day.sessions).forEach(l => l.forEach(s => { if (!s.break) s.mode = mode; }));
+  document.activeElement.blur(); renderSchedule(); await saveSchedule();
+}
+$("btnOpenAll").addEventListener("click", () => setModeAll("open", "Buka paksa"));
+$("btnLockAll").addEventListener("click", () => setModeAll("locked", "Kunci"));
+$("btnAutoAll").addEventListener("click", () => setModeAll("auto", "Kembalikan ke otomatis"));
 
 /* ---- Tema ---- */
 function applyTheme(t) {
